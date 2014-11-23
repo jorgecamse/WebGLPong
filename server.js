@@ -3,5 +3,5 @@ var http = require('http');
 var file = new(static.Server)();
 var app = http.createServer(function (req, res) {
   file.serve(req, res);
-}).listen(2013);
-console.log('Server ready in http://localhost:2013');
+}).listen(process.env.PORT);
+console.log('Server ready in http://localhost:' + process.env.PORT);
