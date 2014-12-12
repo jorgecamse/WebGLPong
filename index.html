@@ -12,6 +12,8 @@
 
 		<!-- Application javascript -->
 		<script src="./js/webrtc.js" type="text/javascript"></script>
+		<script src="./js/webglutils.js" type="text/javascript"></script>
+		<script src="./js/main.js" type="text/javascript"></script>
     </head>
     <body>
         <h1>WebGLPong</h1>
@@ -25,5 +27,9 @@
             <video id='localVideo' class= "camera" autoplay muted></video>
             <video id='remoteVideo' class= "camera" autoplay></video>
         </div>
+
+        <canvas id="canvasgl" width="1000" height="600">
+            Your browser does not support the HTML5 canvas element.
+        </canvas>
     </body>
 </html>
