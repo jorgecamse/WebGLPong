@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "webGLPong Game",
   "dependencies": {
-    "node-static": "^0.7.6"
+    "node-static": "^0.7.6",
+    "socket.io": "^0.9.16"
   }
 }
