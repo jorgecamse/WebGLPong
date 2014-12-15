@@ -21,6 +21,13 @@ function start() {
 		initViewport();
 		initMatrix();
 		loadTextures(textures_source);
+
+		initGame();
+
+		(function animLoop() {
+			drawScene();
+			requestAnimationFrame(animLoop);
+		})();
 	}
 }
 

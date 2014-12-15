@@ -2,6 +2,7 @@ var canvas;
 var gl;
 var glProgram;
 
+var stack= [];
 var mvMatrix;
 var pMatrix;
 var normalMatrix;
@@ -66,12 +67,21 @@ function initShaders(){
 	glProgram.samplerUniform = gl.getUniformLocation(glProgram, "uSampler");
 };
 
-
 /**
  * Initialize the viewport
  */
 function initViewport(){
 	gl.viewport(0, 0, canvas.width, canvas.height);
+};
+
+/**
+ * Clear the canvas before we start drawing on it
+ */
+function clear(){
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	gl.enable(gl.DEPTH_TEST); // Enable depth testing
+	gl.clearDepth(1.0);			// Clear everything
+	gl.depthFunc(gl.LEQUAL);	// Near things obscure far things
 };
 
 function initMatrix() {
@@ -87,6 +97,21 @@ function initMatrix() {
 
 	// Create a normal matrix
 	normalMatrix = mat3.create();
+};
+
+// Push the model view matrix on to the stack
+function pushMatrix() {
+	var matrix = mat4.create();
+	mat4.set(mvMatrix, matrix);
+	stack.push(matrix);
+};
+
+// Pop on the stack back to the model view matrix
+function popMatrix() {
+	if (stack.length == 0)
+		throw "Stack is empty";
+
+	mvMatrix = stack.pop();
 };
 
 /**************************************************************************** 
