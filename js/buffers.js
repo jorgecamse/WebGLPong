@@ -223,6 +223,115 @@ function initBuffers(){
 	ballVertexTextureBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, ballVertexTextureBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ballVertexTexture), gl.STATIC_DRAW);
+
+	/****************************************************************************
+	* Paddle
+	****************************************************************************/
+
+	var pw = Settings.paddle.width / 2.0;
+	var ph = Settings.paddle.height / 2.0;
+	var pd = Settings.paddle.height;
+
+
+	// Paddle position buffer
+	var paddleVertex = [
+		// Front face
+		-pw, -ph,  0.0,
+		pw, -ph,  0.0,
+		pw,  ph,  0.0,
+		-pw,  ph,  0.0,
+
+		// Back face
+		-pw, -ph, -pd,
+		-pw,  ph, -pd,
+		pw,  ph, -pd,
+		pw, -ph, -pd,
+
+		// Top face
+		-pw,  ph, -pd,
+		-pw,  ph,  0.0,
+		pw,  ph,  0.0,
+		pw,  ph, -pd,
+
+		// Bottom face
+		-pw, -ph, -pd,
+		pw, -ph, -pd,
+		pw, -ph,  0.0,
+		-pw, -ph,  0.0,
+
+		// Right face
+		pw, -ph, -pd,
+		pw,  ph, -pd,
+		pw,  ph,  0.0,
+		pw, -ph,  0.0,
+
+		// Left face
+		-pw, -ph, -pd,
+		-pw, -ph,  0.0,
+		-pw,  ph,  0.0,
+		-pw,  ph, -pd
+	];
+	paddleVertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, paddleVertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(paddleVertex), gl.STATIC_DRAW);
+
+	// Paddle index buffer
+	var paddleVertexIndex = [
+		0,  1,  2,      0,  2,  3,    // front
+		4,  5,  6,      4,  6,  7,    // back
+		8,  9,  10,     8,  10, 11,   // top
+		12, 13, 14,     12, 14, 15,   // bottom
+		16, 17, 18,     16, 18, 19,   // right
+		20, 21, 22,     20, 22, 23    // left
+	];
+	paddleVertexIndexBuffer = gl.createBuffer();
+	paddleVertexIndexBuffer.number_vertex_points = paddleVertexIndex.length;
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, paddleVertexIndexBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(paddleVertexIndex), gl.STATIC_DRAW);
+
+	// Paddle normal buffer
+	var paddleVertexNormals = calculateVertexNormal(paddleVertex, paddleVertexIndex);
+
+	paddleVertexNormalBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, paddleVertexNormalBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(paddleVertexNormals), gl.STATIC_DRAW);
+
+	// Paddle texture buffer
+	var paddleVertexTexture = [
+		// Front
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Back
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Top
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Bottom
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Right
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Left
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0
+	];
+	paddleVertexTextureBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, paddleVertexTextureBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(paddleVertexTexture), gl.STATIC_DRAW);
 };
 
 function calculateVertexNormal(vertex, vertexIndex){
