@@ -20,7 +20,9 @@ var Settings = {
 
 var textures_source = [
 	"./textures/field.jpg",
-	"./textures/ball.jpg"
+	"./textures/ball.jpg",
+	"./textures/paddle1.jpg",
+	"./textures/paddle2.jpg"
 ];
 
 function start() {
