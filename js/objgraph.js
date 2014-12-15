@@ -49,3 +49,9 @@ function Ball(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
     this.speed = speed;
 }
 Ball.prototype = new ObjGraph();
+
+function Paddle(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
+    ObjGraph.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
+    this.speed = speed;
+}
+Paddle.prototype = new ObjGraph();
