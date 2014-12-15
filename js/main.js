@@ -6,6 +6,10 @@ var Settings = {
   }
 }
 
+var textures_source = [
+	"./textures/field.jpg"
+];
+
 function start() {
 	// Initialize the GL context
 	initWebGL();
@@ -16,6 +20,7 @@ function start() {
 		initBuffers();
 		initViewport();
 		initMatrix();
+		loadTextures(textures_source);
 	}
 }
 

@@ -6,6 +6,8 @@ var mvMatrix;
 var pMatrix;
 var normalMatrix;
 
+var textures = [];
+
 /**
  * Initialize the WebGL context on the canvas
  */
@@ -118,3 +120,37 @@ function makeShader(src, type){
 	}
 	return shader;
 };
+
+function loadTextures(sources){
+	var images = [];
+	var loadedImages = 0;
+	var numImages = 0;
+	for(var src in sources) {
+		numImages++;
+	}
+	for(var src in sources) {
+		images[src] = new Image();
+		images[src].onload = function() {
+			if(++loadedImages >= numImages) {
+				setupTextures(images);
+			}
+		}
+		images[src].src = sources[src];
+	}
+};
+
+function setupTextures(images){
+	for (i = 0; i < images.length; i++) {
+		gl.activeTexture(gl.TEXTURE0 + i);
+		textures[i] = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, textures[i]);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[i]);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+
+		if( !gl.isTexture(textures[i]) ) {
+			console.error("Error: Texture is invalid");
+		}
+	}
+}
