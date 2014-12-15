@@ -3,7 +3,12 @@ var Settings = {
     width: 1.0,
     height: 2.0,
     texture: 0
-  }
+  },
+  ball: {
+    width: 1.0 / 30.0,
+    speed: 0.008,
+    texture: 1
+  },
 }
 
 var textures_source = [

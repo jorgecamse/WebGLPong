@@ -3,6 +3,11 @@ var fieldVertexBuffer,
 	fieldVertexTextureBuffer,
 	fieldVertexIndexBuffer;
 
+var ballVertexBuffer,
+	ballVertexNormalBuffer,
+	ballVertexTextureBuffer,
+	ballVertexIndexBuffer;
+
 /**
  * Sets up all the buffers in the current GL context
  */
@@ -111,6 +116,113 @@ function initBuffers(){
 	fieldVertexTextureBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, fieldVertexTextureBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fieldVertexTexture), gl.STATIC_DRAW);
+
+	/****************************************************************************
+	* Ball
+	****************************************************************************/
+
+	var bw = Settings.ball.width / 2.0;
+	var bd = Settings.ball.width;
+
+	// Ball position buffer
+	var ballVertex = [
+	  // Front face
+	  -bw, -bw,  0.0,
+	   bw, -bw,  0.0,
+	   bw,  bw,  0.0,
+	  -bw,  bw,  0.0,
+
+	  // Back face
+	  -bw, -bw, -bd,
+	  -bw,  bw, -bd,
+	   bw,  bw, -bd,
+	   bw, -bw, -bd,
+
+	  // Top face
+	  -bw,  bw, -bd,
+	  -bw,  bw,  0.0,
+	   bw,  bw,  0.0,
+	   bw,  bw, -bd,
+
+	  // Bottom face
+	  -bw, -bw, -bd,
+	   bw, -bw, -bd,
+	   bw, -bw,  0.0,
+	  -bw, -bw,  0.0,
+
+	  // Right face
+	   bw, -bw, -bd,
+	   bw,  bw, -bd,
+	   bw,  bw,  0.0,
+	   bw, -bw,  0.0,
+
+	  // Left face
+	  -bw, -bw, -bd,
+	  -bw, -bw,  0.0,
+	  -bw,  bw,  0.0,
+	  -bw,  bw, -bd
+	];
+	ballVertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, ballVertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ballVertex), gl.STATIC_DRAW);
+
+	// Ball index buffer
+	var ballVertexIndex = [
+		0,  1,  2,      0,  2,  3,    // front
+		4,  5,  6,      4,  6,  7,    // back
+		8,  9,  10,     8,  10, 11,   // top
+		12, 13, 14,     12, 14, 15,   // bottom
+		16, 17, 18,     16, 18, 19,   // right
+		20, 21, 22,     20, 22, 23    // left
+	];
+	ballVertexIndexBuffer =gl.createBuffer();
+	ballVertexIndexBuffer.number_vertex_points = ballVertexIndex.length;
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ballVertexIndexBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(ballVertexIndex), gl.STATIC_DRAW);
+
+	// Ball normal buffer
+	var ballVertexNormals = calculateVertexNormal(ballVertex, ballVertexIndex);
+
+	ballVertexNormalBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, ballVertexNormalBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ballVertexNormals), gl.STATIC_DRAW);
+
+	// Ball texture buffer
+	var ballVertexTexture = [
+		// Front
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Back
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Top
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Bottom
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Right
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		// Left
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0
+	];
+	ballVertexTextureBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, ballVertexTextureBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ballVertexTexture), gl.STATIC_DRAW);
 };
 
 function calculateVertexNormal(vertex, vertexIndex){
