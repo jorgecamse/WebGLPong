@@ -2,6 +2,10 @@ var canvas;
 var gl;
 var glProgram;
 
+var mvMatrix;
+var pMatrix;
+var normalMatrix;
+
 /**
  * Initialize the WebGL context on the canvas
  */
@@ -58,6 +62,29 @@ function initShaders(){
 	glProgram.mvMatrixUniform = gl.getUniformLocation(glProgram, "uMVMatrix");
 	glProgram.normalMatrixUniform = gl.getUniformLocation(glProgram, "uNormalMatrix");
 	glProgram.samplerUniform = gl.getUniformLocation(glProgram, "uSampler");
+};
+
+
+/**
+ * Initialize the viewport
+ */
+function initViewport(){
+	gl.viewport(0, 0, canvas.width, canvas.height);
+};
+
+function initMatrix() {
+	// Create a project matrix with 45 degrees field of view
+	pMatrix = mat4.create();
+	mat4.perspective(45, canvas.width / canvas.height, 0.1, 100.0, pMatrix);
+
+	// Create a model view matrix with camera at 0, 0.2, −2.5 and rotate 50 degrees around the X axis
+	mvMatrix = mat4.create();
+	mat4.identity(mvMatrix);
+	mat4.translate(mvMatrix, [0.0, 0.2, -2.0]);
+	mat4.rotate(mvMatrix, 45, [-1.0, 0.0, 0.0]);
+
+	// Create a normal matrix
+	normalMatrix = mat3.create();
 };
 
 /**************************************************************************** 

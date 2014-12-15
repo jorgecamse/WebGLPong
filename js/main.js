@@ -14,6 +14,8 @@ function start() {
 	if (gl) {
 		initShaders();
 		initBuffers();
+		initViewport();
+		initMatrix();
 	}
 }
 
