@@ -41,3 +41,11 @@ ObjGraph.prototype.draw = function() {
     
     popMatrix();
 }
+
+function Ball(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
+    ObjGraph.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
+    this.DirX = 1;
+    this.DirY = 1;
+    this.speed = speed;
+}
+Ball.prototype = new ObjGraph();
