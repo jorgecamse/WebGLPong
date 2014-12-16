@@ -1,7 +1,18 @@
 .camera {
     width: 320px;
     min-height: 240px;
-    float: left;
-    margin: 0 20px 25px 0;
     border: 1px solid #aaa;
+}
+
+#localVideo {
+    float: left;
+}
+
+#remoteVideo {
+    float: right;
+}
+
+#canvasgl {
+	margin-left: 20%;
+	margin-top: -33%;
 }
