@@ -40,6 +40,7 @@ function start() {
 		initGame();
 
 		(function animLoop() {
+			animateScene();
 			drawScene();
 			requestAnimationFrame(animLoop);
 		})();

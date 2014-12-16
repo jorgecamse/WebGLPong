@@ -39,3 +39,7 @@ function drawScene() {
 	// paddle 2
 	paddle2.draw();
 };
+
+function animateScene(){
+	ball.move();
+}

@@ -50,6 +50,22 @@ function Ball(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
 }
 Ball.prototype = new ObjGraph();
 
+Ball.prototype.move = function() {
+    var limitX = Settings.field.width / 2.0 - 0.8*this.width;
+    var limitY = Settings.field.height / 2.0 - 0.8*this.width;
+
+    if (this.posX >= limitX || this.posX <= -limitX) {
+        this.DirX = -this.DirX;
+    }
+    if (this.posY >= limitY || this.posY <= -limitY) {
+        this.DirY = -this.DirY;
+    }
+
+    // update ball position
+    this.posX += this.DirX * this.speed;
+    this.posY += this.DirY * this.speed;
+}
+
 function Paddle(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
     ObjGraph.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
     this.speed = speed;
