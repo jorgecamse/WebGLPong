@@ -71,3 +71,24 @@ function Paddle(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff)
     this.speed = speed;
 }
 Paddle.prototype = new ObjGraph();
+
+Paddle.prototype.move = function() {
+    var limitX = Settings.field.width / 2.0 - this.width;
+
+    // move right
+    if (Key.isDown(Key.RIGHT) || (Key.isDown(Key.D))) {
+        if (this.posX <= limitX) {
+            // update paddle position
+            this.posX += this.speed;
+        }
+
+    }
+    // move left
+    else if (Key.isDown(Key.LEFT) || (Key.isDown(Key.A))) {
+        if (this.posX >= -limitX) {
+            // update paddle position
+            this.posX -= this.speed;
+        }
+    }
+
+}

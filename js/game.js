@@ -42,4 +42,6 @@ function drawScene() {
 
 function animateScene(){
 	ball.move();
+	paddle1.move();
+	paddle2.move();
 }
