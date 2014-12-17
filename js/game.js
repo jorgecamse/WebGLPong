@@ -41,7 +41,10 @@ function drawScene() {
 };
 
 function animateScene(){
-	ball.move();
-	paddle1.move();
-	paddle2.move();
+	if (isInitiator) {
+		ball.move();
+		paddle1.move();
+	} else {
+		paddle2.move();
+	}
 }

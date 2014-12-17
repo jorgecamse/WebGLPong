@@ -218,9 +218,13 @@ function onDataChannelCreated(channel) {
     channel.onmessage =  function (event) {
         //console.log('Received message: ' + event.data);
         var data = JSON.parse(event.data);
-        paddle1.posX = data.M[0];
-        ball.posX = data.M[1];
-        ball.posY = data.M[2];
+        if (isInitiator){
+            paddle2.posX = data.M[0];
+        } else{
+            paddle1.posX = data.M[0];
+            ball.posX = data.M[1];
+            ball.posY = data.M[2];
+        }
     };
 }
 
@@ -279,7 +283,12 @@ function setBandwidth(sdp) {
 }
 
 function sendData(p, b) {
-    var data = JSON.stringify({'M': [p.posX, b.posX, b.posY]});
+    var data;
+    if (isInitiator) {
+        data = JSON.stringify({'M': [p.posX, b.posX, b.posY]});
+    } else{
+        data = JSON.stringify({'M': [p.posX]});
+    }
     //console.log('Sending ' + data);
     dataChannel.send(data);
 }

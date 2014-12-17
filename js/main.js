@@ -40,9 +40,11 @@ function start(isInitiator) {
 		initGame();
 
 		(function animLoop() {
+			animateScene();
 			if (isInitiator) {
-				animateScene();
 				sendData(paddle1, ball);
+			} else{
+				sendData(paddle2);
 			}
 			drawScene();
 			requestAnimationFrame(animLoop);
