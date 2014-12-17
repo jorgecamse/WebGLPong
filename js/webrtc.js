@@ -196,6 +196,7 @@ function createPeerConnection(isInitiator, config, constraints) {
 
 function onLocalSessionCreated(desc) {
     console.log('local session created:', desc);
+    desc.sdp = setBandwidth(desc.sdp);
     peerConn.setLocalDescription(desc, function () {
         console.log('sending local desc:', peerConn.localDescription);
         sendMessage(peerConn.localDescription);
@@ -207,6 +208,7 @@ function onDataChannelCreated(channel) {
 
     channel.onopen = function () {
         console.log('Data channel state is: ' + channel.readyState);
+        start(isInitiator);
     };
 
     channel.onclose = function () {
@@ -214,7 +216,11 @@ function onDataChannelCreated(channel) {
     };
 
     channel.onmessage =  function (event) {
-        trace('Received message: ' + event.data);
+        //console.log('Received message: ' + event.data);
+        var data = JSON.parse(event.data);
+        paddle1.posX = data.M[0];
+        ball.posX = data.M[1];
+        ball.posY = data.M[2];
     };
 }
 
@@ -263,6 +269,19 @@ function mergeConstraints(cons1, cons2) {
     }
     merged.optional.concat(cons2.optional);
     return merged;
+}
+
+var videoBandwidth = 5000;
+function setBandwidth(sdp) {
+    //sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + audioBandwidth + '\r\n');
+    sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + videoBandwidth + '\r\n');
+    return sdp;
+}
+
+function sendData(p, b) {
+    var data = JSON.stringify({'M': [p.posX, b.posX, b.posY]});
+    //console.log('Sending ' + data);
+    dataChannel.send(data);
 }
 
 function randomToken() {

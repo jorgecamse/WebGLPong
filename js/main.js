@@ -25,7 +25,7 @@ var textures_source = [
 	"./textures/paddle2.jpg"
 ];
 
-function start() {
+function start(isInitiator) {
 	// Initialize the GL context
 	initWebGL();
 
@@ -40,13 +40,12 @@ function start() {
 		initGame();
 
 		(function animLoop() {
-			animateScene();
+			if (isInitiator) {
+				animateScene();
+				sendData(paddle1, ball);
+			}
 			drawScene();
 			requestAnimationFrame(animLoop);
 		})();
 	}
 }
-
-$(document).ready(function() {
-	start();
-});
