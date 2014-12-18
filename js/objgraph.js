@@ -90,5 +90,15 @@ Paddle.prototype.move = function() {
             this.posX -= this.speed;
         }
     }
+}
 
+Paddle.prototype.logic = function() {
+    if (ball.posX <= this.posX + Settings.paddle.width / 2.0  &&
+            ball.posX >= this.posX - Settings.paddle.width / 2.0) {
+        if (ball.posY - Settings.ball.width / 2.0 <=  this.posY + Settings.paddle.height / 2.0 && 
+                ball.posY + Settings.ball.width / 2.0 >=  this.posY + Settings.paddle.height / 2.0) {
+          ball.DirX = -ball.DirX;
+          ball.DirY = -this.posY * 0.7;
+        }
+    }
 }

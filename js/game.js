@@ -44,6 +44,8 @@ function animateScene(){
 	if (isInitiator) {
 		ball.move();
 		paddle1.move();
+		paddle1.logic();
+		paddle2.logic();
 	} else {
 		paddle2.move();
 	}
