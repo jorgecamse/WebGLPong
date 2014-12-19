@@ -9,12 +9,13 @@ var pc_constraints = { 'optional': [{'DtlsSrtpKeyAgreement': true}, {'RtpDataCha
 // Set up audio and video regardless of what devices are present.
 var sdpConstraints = {'mandatory': {'OfferToReceiveAudio':true, 'OfferToReceiveVideo':true }};
 
-// Create a random room if not already present in the URL.
 var isInitiator;
-var room = window.location.hash.substring(1);
-if (!room) {
-    room = window.location.hash = randomToken();
-}
+
+var localVideo;
+var remoteVideo;
+
+var room;
+var userName;
 
 /****************************************************************************
  * Signaling server 
@@ -23,24 +24,19 @@ if (!room) {
 // Connect to the signaling server
 var socket = io.connect();
 
-socket.on('ipaddr', function (ipaddr) {
-    console.log('Server IP address is: ' + ipaddr);
-    updateRoomURL(ipaddr);
-});
-
-socket.on('created', function (room, clientId) {
-  console.log('Created room', room, '- my client ID is', clientId);
+socket.on('created', function (room, clientName) {
+  console.log('Created room', room, '- my client name is', clientName);
   isInitiator = true;
   grabWebCamVideo();
 });
 
-socket.on('join', function (room, clientId) {
-    console.log('Another peer made a request to join room', room, 'with client ID', clientId);
+socket.on('join', function (room, clientName) {
+    console.log('Another peer made a request to join room', room, 'with client name', clientName);
     console.log('This peer is the initiator of room', room);
 });
 
-socket.on('joined', function (room, clientId) {
-  console.log('This peer has joined room', room, 'with client ID', clientId);
+socket.on('joined', function (room, clientName) {
+  console.log('This peer has joined room', room, 'with client name', clientName);
   isInitiator = false;
   grabWebCamVideo();
 });
@@ -60,32 +56,12 @@ socket.on('message', function (message){
     signalingMessageCallback(message);
 });
 
-// Join a room
-socket.emit('create or join', room);
-
-if (location.hostname.match(/localhost|127\.0\.0/)) {
-    socket.emit('ipaddr');
-}
-
 /**
  * Send message to signaling server
  */
 function sendMessage(message){
     console.log('Client sending message: ', message);
     socket.emit('message', message);
-}
-
-/**
- * Updates URL on the page so that users can copy&paste it to their peers.
- */
-function updateRoomURL(ipaddr) {
-    var url;
-    if (!ipaddr) {
-        url = location.href
-    } else {
-        url = location.protocol + '//' + ipaddr + ':2013/#' + room
-    }
-    roomURL.innerHTML = url;
 }
 
 /**************************************************************************** 
@@ -293,16 +269,19 @@ function sendData(p, b) {
     dataChannel.send(data);
 }
 
-function randomToken() {
-    return Math.floor((1 + Math.random()) * 1e16).toString(16).substring(1);
-}
-
 function logError(err) {
     console.log(err.toString(), err);
 }
 
 $(document).ready(function() {
-	roomURL = document.getElementById('url'),
 	localVideo = document.getElementById('localVideo');
     remoteVideo = document.getElementById('remoteVideo');
+
+    $('#enter').on('click', function(e){
+        userName = $('#username').val();
+        room = $('#room').val();
+
+        // Join a room
+        socket.emit('create or join', room, userName);
+    });
 });

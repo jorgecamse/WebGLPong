@@ -27,34 +27,25 @@ io.sockets.on('connection', function (socket){
 		socket.broadcast.emit('message', message); // should be room only
 	});
 
-	socket.on('create or join', function (room) {
+	socket.on('create or join', function (room, clientName) {
 		var numClients = io.sockets.clients(room).length;
+
+		socket.username = clientName;
 
 		log('Room ' + room + ' has ' + numClients + ' client(s)');
 		log('Request to create or join room', room);
 
 		if (numClients == 0){
 			socket.join(room);
-			socket.emit('created', room, socket.id);
+			socket.emit('created', room, socket.username);
 		} else if (numClients == 1) {
-			io.sockets.in(room).emit('join', room, socket.id);
+			io.sockets.in(room).emit('join', room, socket.username);
 			socket.join(room);
-			socket.emit('joined', room, socket.id);
+			socket.emit('joined', room, socket.username);
 		} else { // max two clients
 			socket.emit('full', room);
 		}
-		socket.emit('emit(): client ' + socket.id + ' joined room ' + room);
-		socket.broadcast.emit('broadcast(): client ' + socket.id + ' joined room ' + room);
+		socket.emit('emit(): client ' + socket.username + ' joined room ' + room);
+		socket.broadcast.emit('broadcast(): client ' + socket.username + ' joined room ' + room);
 	});
-
-	socket.on('ipaddr', function () {
-        var ifaces = os.networkInterfaces();
-        for (var dev in ifaces) {
-            ifaces[dev].forEach(function (details) {
-                if (details.family=='IPv4' && details.address != '127.0.0.1') {
-                    socket.emit('ipaddr', details.address);
-                }
-          });
-        }
-    });
 });
