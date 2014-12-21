@@ -7,6 +7,8 @@
 
 	var objectsGL;
 
+	var peer;
+
 	var sources_textures = [
 		"./textures/field.jpg",
 		"./textures/ball.jpg",
@@ -50,22 +52,62 @@
 	};
 
 	function animateScene(){
-		objectsGL.ball.move();
-		objectsGL.paddle1.move();
-		objectsGL.paddle2.move();
-		objectsGL.paddle1.logic();
-		objectsGL.paddle2.logic();
+		if (peer.isInitiator) {
+			objectsGL.ball.move();
+			objectsGL.paddle1.move();
+			objectsGL.paddle1.logic();
+			objectsGL.paddle2.logic();
+		}	else {
+			objectsGL.paddle2.move();
+		};
+	};
+
+	function send() {
+		var data;
+
+		if (peer.isInitiator) {
+			data = {
+				paddle: {
+					x: objectsGL.paddle1.posX
+				},
+				ball: {
+					x: objectsGL.ball.posX,
+					y: objectsGL.ball.posY
+				}
+			};
+		} else {
+			data = {
+				paddle: {
+					x: objectsGL.paddle2.posX
+				}
+			};
+		};
+
+		peer.sendData(data);
 	};
 
 	function updateScene() {
 		(function animLoop() {
 			animateScene();
+			send();
 			drawScene();
 			requestAnimationFrame(animLoop);
 		})();
-  };
+	};
 
-	module.start = function(canvas) {
+	module.onReceiveData = function(data) {
+		if (peer.isInitiator){
+			objectsGL.paddle2.posX = data.paddle.x;
+		} else {
+			objectsGL.paddle1.posX = data.paddle.x;
+			objectsGL.ball.posX = data.ball.x;
+			objectsGL.ball.posY = data.ball.y;
+		};
+	};
+
+	module.start = function(canvas, p) {
+
+		peer = p;
 
 		function initBrowser(images) {
 			// Initialize the GL context
@@ -84,8 +126,8 @@
 		};
 
 		loadTextures(sources_textures, initBrowser);
-  };
+	};
 
-  return module;
+	return module;
 
 }());

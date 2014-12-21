@@ -140,6 +140,7 @@ var WebRTCPeer = (function () {
 	Peer.prototype.addDataChannelListeners = function(channel) {
 		channel.onopen = function () {
 			console.log('Data channel state is: ' + channel.readyState);
+			WebGLGame.start(canvas, peer);
     };
 
     channel.onclose = function () {
@@ -147,8 +148,16 @@ var WebRTCPeer = (function () {
     };
 
     channel.onmessage =  function (event) {
-			console.log('Received message: ' + event.data);
+			var data = JSON.parse(event.data);
+			//console.log('Received message: ' + data);
+
+			WebGLGame.onReceiveData(data);
     };
+	};
+
+	Peer.prototype.sendData = function(data) {
+    //console.log('Sending ' + data);
+    this.dataChannel.send(JSON.stringify(data));
 	};
 
 	/* Default user media constraints */
