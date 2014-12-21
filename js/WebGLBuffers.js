@@ -1,19 +1,16 @@
 /**
- * Buffers Module
+ * WebGL Buffers Module
  */
-var Buffers = (function () {
+var WebGLBuffers = (function () {
 
 	var module = {};
 
-	var fieldVertexBuffer,
-		fieldVertexNormalBuffer,
-		fieldVertexTextureBuffer,
-		fieldVertexIndexBuffer;
-
-	var ballVertexBuffer,
-		ballVertexNormalBuffer,
-		ballVertexTextureBuffer,
-		ballVertexIndexBuffer;
+	var buffers = {
+		field: {},
+		ball: {},
+		paddle: {},
+		empty: true
+	};
 
 	function calculateVertexNormal(vertex, vertexIndex){
 		var vertexNormals = [];
@@ -102,9 +99,10 @@ var Buffers = (function () {
 			-fw,  fh,  0.0,
 			-fw,  fh, -fd
 		];
-		fieldVertexBuffer = gl.createBuffer();
+		var fieldVertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, fieldVertexBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fieldVertex), gl.STATIC_DRAW);
+		buffers.field.vertex = fieldVertexBuffer;
 
 		// Field index buffer
 		var fieldVertexIndex = [
@@ -113,17 +111,19 @@ var Buffers = (function () {
 			16, 17, 18,		16, 18, 19,		// right
 			20, 21, 22,		20, 22, 23		// left
 		];
-		fieldVertexIndexBuffer = gl.createBuffer();
+		var fieldVertexIndexBuffer = gl.createBuffer();
 		fieldVertexIndexBuffer.number_vertex_points = fieldVertexIndex.length;
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, fieldVertexIndexBuffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(fieldVertexIndex), gl.STATIC_DRAW);
+		buffers.field.vindex = fieldVertexIndexBuffer;
 
 		// Field normal buffer
 		var fieldVertexNormals = calculateVertexNormal(fieldVertex, fieldVertexIndex);
 
-		fieldVertexNormalBuffer = gl.createBuffer();
+		var fieldVertexNormalBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, fieldVertexNormalBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fieldVertexNormals), gl.STATIC_DRAW);
+		buffers.field.vnormal = fieldVertexNormalBuffer;
 
 		// Field texture buffer
 		var fieldVertexTexture = [
@@ -158,9 +158,10 @@ var Buffers = (function () {
 			1.0,  1.0,
 			0.0,  1.0
 		];
-		fieldVertexTextureBuffer = gl.createBuffer();
+		var fieldVertexTextureBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, fieldVertexTextureBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fieldVertexTexture), gl.STATIC_DRAW);
+		buffers.field.vtexture = fieldVertexTextureBuffer;
 
 		/****************************************************************************
 		* Ball
@@ -207,9 +208,10 @@ var Buffers = (function () {
 		  -bw,  bw,  0.0,
 		  -bw,  bw, -bd
 		];
-		ballVertexBuffer = gl.createBuffer();
+		var ballVertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, ballVertexBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ballVertex), gl.STATIC_DRAW);
+		buffers.ball.vertex = ballVertexBuffer;
 
 		// Ball index buffer
 		var ballVertexIndex = [
@@ -220,17 +222,19 @@ var Buffers = (function () {
 			16, 17, 18,     16, 18, 19,   // right
 			20, 21, 22,     20, 22, 23    // left
 		];
-		ballVertexIndexBuffer =gl.createBuffer();
+		var ballVertexIndexBuffer = gl.createBuffer();
 		ballVertexIndexBuffer.number_vertex_points = ballVertexIndex.length;
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ballVertexIndexBuffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(ballVertexIndex), gl.STATIC_DRAW);
+		buffers.ball.vindex = ballVertexIndexBuffer;
 
 		// Ball normal buffer
 		var ballVertexNormals = calculateVertexNormal(ballVertex, ballVertexIndex);
 
-		ballVertexNormalBuffer = gl.createBuffer();
+		var ballVertexNormalBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, ballVertexNormalBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ballVertexNormals), gl.STATIC_DRAW);
+		buffers.ball.vnormal = ballVertexNormalBuffer;
 
 		// Ball texture buffer
 		var ballVertexTexture = [
@@ -265,9 +269,10 @@ var Buffers = (function () {
 			1.0,  1.0,
 			0.0,  1.0
 		];
-		ballVertexTextureBuffer = gl.createBuffer();
+		var ballVertexTextureBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, ballVertexTextureBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ballVertexTexture), gl.STATIC_DRAW);
+		buffers.ball.vtexture = ballVertexTextureBuffer;
 
 		/****************************************************************************
 		* Paddle
@@ -316,9 +321,10 @@ var Buffers = (function () {
 			-pw,  ph,  0.0,
 			-pw,  ph, -pd
 		];
-		paddleVertexBuffer = gl.createBuffer();
+		var paddleVertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, paddleVertexBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(paddleVertex), gl.STATIC_DRAW);
+		buffers.paddle.vertex = paddleVertexBuffer;
 
 		// Paddle index buffer
 		var paddleVertexIndex = [
@@ -329,17 +335,19 @@ var Buffers = (function () {
 			16, 17, 18,     16, 18, 19,   // right
 			20, 21, 22,     20, 22, 23    // left
 		];
-		paddleVertexIndexBuffer = gl.createBuffer();
+		var paddleVertexIndexBuffer = gl.createBuffer();
 		paddleVertexIndexBuffer.number_vertex_points = paddleVertexIndex.length;
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, paddleVertexIndexBuffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(paddleVertexIndex), gl.STATIC_DRAW);
+		buffers.paddle.vindex = paddleVertexIndexBuffer;
 
 		// Paddle normal buffer
 		var paddleVertexNormals = calculateVertexNormal(paddleVertex, paddleVertexIndex);
 
-		paddleVertexNormalBuffer = gl.createBuffer();
+		var paddleVertexNormalBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, paddleVertexNormalBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(paddleVertexNormals), gl.STATIC_DRAW);
+		buffers.paddle.vnormal = paddleVertexNormalBuffer;
 
 		// Paddle texture buffer
 		var paddleVertexTexture = [
@@ -374,10 +382,20 @@ var Buffers = (function () {
 			1.0,  1.0,
 			0.0,  1.0
 		];
-		paddleVertexTextureBuffer = gl.createBuffer();
+		var paddleVertexTextureBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, paddleVertexTextureBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(paddleVertexTexture), gl.STATIC_DRAW);
+		buffers.paddle.vtexture = paddleVertexTextureBuffer;
+
+		buffers.empty = false;
 	};
+
+	module.get = function() {
+		if (buffers.empty)
+			throw ("Buffers are not initialized");
+
+		return buffers;
+  };
 
 	return module;
 
