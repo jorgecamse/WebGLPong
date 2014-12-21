@@ -51,3 +51,14 @@ function start(isInitiator) {
 		})();
 	}
 }
+
+$(document).ready(function() {
+	localVideo = document.getElementById('localVideo');
+	remoteVideo = document.getElementById('remoteVideo');
+
+	$('#enter').on('click', function(e){
+		room = $('#room').val();
+		userName = $('#username').val();
+		WebRTCPeerStreaming.initPeerIface(room, userName);
+	});
+});
