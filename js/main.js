@@ -18,47 +18,16 @@ var Settings = {
 	}
 }
 
-var textures_source = [
-	"./textures/field.jpg",
-	"./textures/ball.jpg",
-	"./textures/paddle1.jpg",
-	"./textures/paddle2.jpg"
-];
-
-function start(isInitiator) {
-	// Initialize the GL context
-	initWebGL();
-
-	// Only continue if WebGL is available and working
-	if (gl) {
-		initShaders();
-		initBuffers();
-		initViewport();
-		initMatrix();
-		loadTextures(textures_source);
-
-		initGame();
-
-		(function animLoop() {
-			animateScene();
-			if (isInitiator) {
-				sendData(paddle1, ball);
-			} else{
-				sendData(paddle2);
-			}
-			drawScene();
-			requestAnimationFrame(animLoop);
-		})();
-	}
-}
-
 $(document).ready(function() {
 	localVideo = document.getElementById('localVideo');
 	remoteVideo = document.getElementById('remoteVideo');
+	canvas = document.getElementById('canvasgl');
 
 	$('#enter').on('click', function(e){
 		room = $('#room').val();
 		userName = $('#username').val();
 		WebRTCPeerStreaming.initPeerIface(room, userName);
+
+		WebGLGame.start(canvas);
 	});
 });
