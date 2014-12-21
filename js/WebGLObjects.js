@@ -1,7 +1,7 @@
 /**
- * WebGL Object Module
+ * WebGL Objects Module
  */
-var WebGLObject = (function () {
+var WebGLObjects = (function () {
 
 	var module = {};
 
@@ -13,7 +13,7 @@ var WebGLObject = (function () {
 
 	var objects = {};
 
-	function ObjGraph(width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff){
+	function ObjGL(width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff){
 		this.width = width;
 		this.height = height;
 		this.posX = x;
@@ -25,7 +25,7 @@ var WebGLObject = (function () {
 		this.nbuff = nbuff;
 	};
 
-	ObjGraph.prototype.draw = function() {
+	ObjGL.prototype.draw = function() {
 		WebGLUtils.pushMatrix();
 
 		mat4.translate(matrix.mv, [this.posX, this.posY, 0.0]);
@@ -58,12 +58,12 @@ var WebGLObject = (function () {
 	};
 
 	function Ball(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
-		ObjGraph.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
+		ObjGL.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
 		this.DirX = 1;
 		this.DirY = 1;
 		this.speed = speed;
 	};
-	Ball.prototype = new ObjGraph();
+	Ball.prototype = new ObjGL();
 
 	Ball.prototype.move = function() {
 		var limitX = Settings.field.width / 2.0 - 0.8*this.width;
@@ -82,10 +82,10 @@ var WebGLObject = (function () {
 	}
 
 	function Paddle(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
-		ObjGraph.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
+		ObjGL.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
 		this.speed = speed;
 	}
-	Paddle.prototype = new ObjGraph();
+	Paddle.prototype = new ObjGL();
 
 	Paddle.prototype.move = function() {
 		var limitX = Settings.field.width / 2.0 - this.width;
@@ -126,7 +126,7 @@ var WebGLObject = (function () {
 
 		var buffers = WebGLBuffers.get();
 
-		objects.field = new ObjGraph(Settings.field.width, Settings.field.height, 0.0, 0.0, 
+		objects.field = new ObjGL(Settings.field.width, Settings.field.height, 0.0, 0.0, 
 				buffers.field.vertex, buffers.field.vindex, buffers.field.vtexture, Settings.field.texture, 
 				buffers.field.vnormal);
 
