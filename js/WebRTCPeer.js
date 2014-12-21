@@ -140,7 +140,7 @@ var WebRTCPeer = (function () {
 	Peer.prototype.addDataChannelListeners = function(channel) {
 		channel.onopen = function () {
 			console.log('Data channel state is: ' + channel.readyState);
-			WebGLGame.start(canvas, peer);
+			WebGLGame.play();
     };
 
     channel.onclose = function () {
@@ -208,6 +208,13 @@ var WebRTCPeer = (function () {
 		var constraints = peer.userMediaConstraints;
 
 		getUserMedia(constraints, peer.onUserMedia, defaultError);
+
+		return peer;
+  };
+
+	module.get = function() {
+		if (!peer)
+			throw ("Peer is not initialized");
 
 		return peer;
   };

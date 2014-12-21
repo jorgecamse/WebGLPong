@@ -27,5 +27,6 @@ $(document).ready(function() {
 		room = $('#room').val();
 		userName = $('#username').val();
 		WebRTCPeerStreaming.initPeerIface(room, userName);
+		WebGLGame.start(canvas);
 	});
 });
