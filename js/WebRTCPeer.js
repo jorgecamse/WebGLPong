@@ -196,6 +196,10 @@ var WebRTCPeer = (function () {
 		peer.stream = localStream;
 		console.log('getUserMedia video stream URL:', peer.localVideo.src);
 
+		peer.localVideo.oncanplay = function(e) {
+			$('#modal-wait').modal('hide');
+    };
+
 		peer.iface.sendMessage({
 			type: 'media'
 		});

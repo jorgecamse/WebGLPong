@@ -18,15 +18,28 @@ var Settings = {
 	}
 }
 
+function loadContent(content) {
+	$("#modal-container").load("../html/modal.html #" + content, function(response, status, xhr) {
+		if ( status == "error" ) {
+			alert("Sorry but there was an error: ");
+		};
+
+		$('#'+ content).modal('show');
+	});
+};
+
+function enterRoom() {
+	loadContent('modal-wait');
+	room = $('#room').val();
+	userName = $('#username').val();
+	WebRTCPeerStreaming.initPeerIface(room, userName);
+	WebGLGame.start(canvas);
+};
+
 $(document).ready(function() {
 	localVideo = document.getElementById('localVideo');
 	remoteVideo = document.getElementById('remoteVideo');
 	canvas = document.getElementById('canvasgl');
 
-	$('#enter').on('click', function(e){
-		room = $('#room').val();
-		userName = $('#username').val();
-		WebRTCPeerStreaming.initPeerIface(room, userName);
-		WebGLGame.start(canvas);
-	});
+	loadContent("modal-index");
 });
