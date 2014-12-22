@@ -1,7 +1,19 @@
 .camera {
-    width: 320px;
-    min-height: 240px;
-    border: 1px solid #aaa;
+  width: 140px;
+  height: 140px;
+  display: inline-block;
+  margin: 10px;
+}
+
+.video-polaroid {
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 4px;
+}
+
+video {
+  vertical-align: middle;
 }
 
 #localVideo {

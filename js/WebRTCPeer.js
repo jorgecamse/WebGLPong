@@ -165,7 +165,8 @@ var WebRTCPeer = (function () {
 		audio : true,
 		video : {
 			mandatory : {
-				maxWidth : 640,
+				maxWidth : 320,
+				maxHeight : 640,
 				maxFrameRate : 15,
 				minFrameRate : 15
 			}
