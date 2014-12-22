@@ -3,6 +3,7 @@
   height: 140px;
   display: inline-block;
   margin: 10px;
+  margin-top: 90px;
 }
 
 .video-polaroid {
@@ -17,14 +18,22 @@ video {
 }
 
 #localVideo {
-    float: left;
+  float: left;
 }
 
 #remoteVideo {
-    float: right;
+  float: right;
 }
 
 #canvasgl {
 	margin-left: 20%;
 	margin-top: -33%;
+}
+
+#logo {
+	margin-top: -25px;
+}
+
+#title {
+	color: white;
 }
