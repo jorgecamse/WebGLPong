@@ -18,7 +18,7 @@ var Settings = {
 	}
 }
 
-function loadContent(content) {
+function loadModal(content) {
 	$("#modal-container").load("../html/modal.html #" + content, function(response, status, xhr) {
 		if ( status == "error" ) {
 			alert("Sorry but there was an error: ");
@@ -29,6 +29,20 @@ function loadContent(content) {
 			backdrop: 'static'
 		});
 	});
+};
+
+function showAlert(content) {
+	$("#panel-alerts").load("../html/modal.html #" + content, function(response, status, xhr) {
+		if ( status == "error" ) {
+			alert("Sorry but there was an error: ");
+		};
+
+		$('#'+ content).show();
+	});
+};
+
+function hideAlert(content) {
+	$('#'+ content).hide();
 };
 
 function enterRoom() {
@@ -43,5 +57,8 @@ $(document).ready(function() {
 	remoteVideo = document.getElementById('remoteVideo');
 	canvas = document.getElementById('canvasgl');
 
-	loadContent("modal-index");
+	canvas.width =  window.innerWidth / 1.7;
+	canvas.height =  window.innerHeight;
+
+	loadModal("modal-index");
 });

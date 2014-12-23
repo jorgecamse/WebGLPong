@@ -58,6 +58,7 @@ var WebRTCPeer = (function () {
 
 	/* Create the RTCPeerConnection object and starts the SDP negotiation process */
 	Peer.prototype.start = function() {
+		showAlert('alert-connecting');
 		console.log('Creating Peer connection as initiator?', this.isInitiator,
 			'  config: \'' + JSON.stringify(this.server) + '\';\n' +
 			'  constraints: \'' + JSON.stringify(this.options) + '\'.');
@@ -140,7 +141,9 @@ var WebRTCPeer = (function () {
 	Peer.prototype.addDataChannelListeners = function(channel) {
 		channel.onopen = function () {
 			console.log('Data channel state is: ' + channel.readyState);
-			WebGLGame.play();
+			//WebGLGame.play();
+			hideAlert('alert-connecting');
+			showAlert('alert-connected');
     };
 
     channel.onclose = function () {

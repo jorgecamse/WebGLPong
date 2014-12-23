@@ -1,9 +1,8 @@
 .camera {
-  width: 205px;
+  width: 180px;
   height: 185px;
   display: inline-block;
   margin: 10px;
-  margin-top: 90px;
 }
 
 .video-container {
@@ -12,20 +11,14 @@
   background-color: #f7f7f9;
 }
 
-video {
-  vertical-align: middle;
-}
-
 #localVideo {
   float: left;
+  margin-top: 90px;
 }
 
 #remoteVideo {
   float: right;
-}
-
-#canvasgl {
-	margin-top: 90px;
+  margin-top: 90px;
 }
 
 #logo {
@@ -34,4 +27,16 @@ video {
 
 #title {
 	color: white;
+}
+
+#panel-alerts {
+  text-align: center;
+}
+
+.alert {
+  position: absolute;
+  margin-top: 90px;
+  margin-left: -125px;
+  left: 50%;
+  width: 250px;
 }
