@@ -1,16 +1,15 @@
 .camera {
-  width: 140px;
-  height: 140px;
+  width: 205px;
+  height: 185px;
   display: inline-block;
   margin: 10px;
   margin-top: 90px;
 }
 
-.video-polaroid {
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 4px;
+.video-container {
+  box-shadow: 0 0 0 1px #e6eaed;
+  border-radius: 6px;
+  background-color: #f7f7f9;
 }
 
 video {
