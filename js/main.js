@@ -80,16 +80,16 @@ function enterRoom(url) {
 			room = $('#room').attr("placeholder");
 		};
 	};
+
 	window.location.hash = room;
 	$('#modal-index').modal('hide');
-	updateRoomURL(room);
+	updateRoomURL();
 
 	WebRTCPeerStreaming.initPeerIface(room);
-	WebGLGame.start(canvas);
 };
 
-function updateRoomURL(room) {
-  var url = location.href + room;
+function updateRoomURL() {
+  var url = location.host + '/#' + room;
   $('#facetime-icon').css('visibility', 'visible');
   roomURL.innerHTML = url;
 }
