@@ -29,7 +29,7 @@ var WebRTCPeerStreaming = (function () {
 			});
 
 			socket.on('joined', function (room, clientID) {
-				console.log('This peer has joined room', room, 'with client name', clientID);
+				console.log('This peer has joined room', room, 'with client ID', clientID);
 				peer = WebRTCPeer.start(localVideo, remoteVideo, false, that);
 			});
 
