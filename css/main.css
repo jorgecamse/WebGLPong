@@ -36,7 +36,7 @@
 .alert {
   position: absolute;
   margin-top: 90px;
-  margin-left: -125px;
+  margin-left: -250px;
   left: 50%;
-  width: 250px;
+  width: 500px;
 }

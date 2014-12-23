@@ -141,9 +141,8 @@ var WebRTCPeer = (function () {
 	Peer.prototype.addDataChannelListeners = function(channel) {
 		channel.onopen = function () {
 			console.log('Data channel state is: ' + channel.readyState);
-			//WebGLGame.play();
 			hideAlert('alert-connecting');
-			showAlert('alert-connected');
+			showAlert('alert-connected', countDown);
     };
 
     channel.onclose = function () {

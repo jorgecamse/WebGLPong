@@ -31,18 +31,36 @@ function loadModal(content) {
 	});
 };
 
-function showAlert(content) {
+function showAlert(content, callback) {
 	$("#panel-alerts").load("../html/modal.html #" + content, function(response, status, xhr) {
 		if ( status == "error" ) {
 			alert("Sorry but there was an error: ");
 		};
 
 		$('#'+ content).show();
+
+		if(callback){
+			callback();
+		};
 	});
 };
 
 function hideAlert(content) {
 	$('#'+ content).hide();
+};
+
+var totalTime = 5;
+
+function countDown(){
+  document.getElementById('CuentaAtras').innerHTML = totalTime;
+
+  if(totalTime==0){
+		hideAlert('alert-connected');
+		WebGLGame.play();
+	} else {
+		totalTime-=1;
+		setTimeout("countDown()",1000);
+  };
 };
 
 function enterRoom() {
