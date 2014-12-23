@@ -87,8 +87,6 @@
 	};
 
 	module.play = function() {
-		peer = WebRTCPeer.get();
-
 		(function animLoop() {
 			animateScene();
 			send();
@@ -107,7 +105,8 @@
 		};
 	};
 
-	module.start = function(canvas) {
+	module.start = function() {
+		peer = WebRTCPeer.get();
 
 		function initBrowser(images) {
 			// Initialize the GL context
@@ -120,7 +119,7 @@
 				WebGLUtils.initViewport();
 				WebGLUtils.initMatrix();
 				WebGLUtils.setupTextures(images);
-				objectsGL = WebGLObjects.start();
+				objectsGL = WebGLObjects.start(countDown);
 			}
 		};
 
