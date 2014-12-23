@@ -40,3 +40,13 @@
   left: 50%;
   width: 500px;
 }
+
+#url {
+	font-size: 17px;
+	color: white;
+}
+
+#facetime-icon {
+  visibility: hidden;
+  margin-left: 15px;
+}

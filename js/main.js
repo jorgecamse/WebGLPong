@@ -24,6 +24,8 @@ function loadModal(content) {
 			alert("Sorry but there was an error: ");
 		};
 
+		updatePlaceHolder();
+
 		$('#'+ content).modal({
 			show: true,
 			backdrop: 'static'
@@ -63,12 +65,34 @@ function countDown(){
   };
 };
 
-function enterRoom() {
-	room = $('#room').val();
+function randomToken() {
+  return Math.floor((1 + Math.random()) * 1e16).toString(16).substring(1);
+}
+
+function updatePlaceHolder() {
+	$('#room').attr("placeholder", randomToken());
+};
+
+function enterRoom(url) {
+	if (!url) {
+		room = $('#room').val();
+		if(!room) {
+			room = $('#room').attr("placeholder");
+		};
+	};
+	window.location.hash = room;
 	$('#modal-index').modal('hide');
+	updateRoomURL(room);
+
 	WebRTCPeerStreaming.initPeerIface(room);
 	WebGLGame.start(canvas);
 };
+
+function updateRoomURL(room) {
+  var url = location.href + room;
+  $('#facetime-icon').css('visibility', 'visible');
+  roomURL.innerHTML = url;
+}
 
 $(document).ready(function() {
 	localVideo = document.getElementById('localVideo');
@@ -78,5 +102,11 @@ $(document).ready(function() {
 	canvas.width =  window.innerWidth / 1.7;
 	canvas.height =  window.innerHeight;
 
-	loadModal("modal-index");
+	roomURL = document.getElementById('url');
+	room = window.location.hash.substring(1);
+	if (!room) {
+		loadModal("modal-index");
+	} else {
+		enterRoom(room);
+	};
 });
