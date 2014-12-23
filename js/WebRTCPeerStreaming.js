@@ -18,18 +18,18 @@ var WebRTCPeerStreaming = (function () {
 
 		/* Signaling server event handlers */
 		function addListeners() {
-			socket.on('created', function (room, clientName) {
-				console.log('Created room', room, '- my client name is', clientName);
+			socket.on('created', function (room, clientID) {
+				console.log('Created room', room, '- my client ID is', clientID);
 				peer = WebRTCPeer.start(localVideo, remoteVideo, true, that);
 			});
 
-			socket.on('join', function (room, clientName) {
-				console.log('Another peer made a request to join room', room, 'with client name', clientName);
+			socket.on('join', function (room, clientID) {
+				console.log('Another peer made a request to join room', room, 'with client ID', clientName);
 				console.log('This peer is the initiator of room', room);
 			});
 
-			socket.on('joined', function (room, clientName) {
-				console.log('This peer has joined room', room, 'with client name', clientName);
+			socket.on('joined', function (room, clientID) {
+				console.log('This peer has joined room', room, 'with client name', clientID);
 				peer = WebRTCPeer.start(localVideo, remoteVideo, false, that);
 			});
 
@@ -72,11 +72,11 @@ var WebRTCPeerStreaming = (function () {
 		}
 
 		/* Connect peer to signaling server */
-		that.connectPeer = function(room, clientName) {
+		that.connectPeer = function(room) {
 			socket = io.connect();
 			addListeners();
 			console.log("Creating or joining...");
-			socket.emit('create or join', room, clientName);
+			socket.emit('create or join', room);
 		};
 
  		/* Send message to signaling server */
@@ -88,9 +88,9 @@ var WebRTCPeerStreaming = (function () {
 		return that;
   };
 
-	module.initPeerIface = function(room, clientName) {
+	module.initPeerIface = function(room) {
 		iface = PeerIface();
-		iface.connectPeer(room, clientName);
+		iface.connectPeer(room);
 
 		return iface;
 	};

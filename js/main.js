@@ -29,10 +29,9 @@ function loadContent(content) {
 };
 
 function enterRoom() {
-	loadContent('modal-wait');
 	room = $('#room').val();
-	userName = $('#username').val();
-	WebRTCPeerStreaming.initPeerIface(room, userName);
+	$('#modal-index').modal('hide');
+	WebRTCPeerStreaming.initPeerIface(room);
 	WebGLGame.start(canvas);
 };
 

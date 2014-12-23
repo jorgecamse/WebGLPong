@@ -27,10 +27,9 @@ io.sockets.on('connection', function (socket){
 		socket.broadcast.in(socket.room).emit('message', message); // should be room only
 	});
 
-	socket.on('create or join', function (room, clientName) {
+	socket.on('create or join', function (room) {
 		var numClients = io.sockets.clients(room).length;
 
-		socket.username = clientName;
 		socket.room = room;
 
 		log('Room ' + room + ' has ' + numClients + ' client(s)');
@@ -38,15 +37,15 @@ io.sockets.on('connection', function (socket){
 
 		if (numClients == 0){
 			socket.join(room);
-			socket.emit('created', room, socket.username);
+			socket.emit('created', room, socket.id);
 		} else if (numClients == 1) {
-			io.sockets.in(room).emit('join', room, socket.username);
+			io.sockets.in(room).emit('join', room, socket.id);
 			socket.join(room);
-			socket.emit('joined', room, socket.username);
+			socket.emit('joined', room, socket.id);
 		} else { // max two clients
 			socket.emit('full', room);
 		}
-		socket.emit('emit(): client ' + socket.username + ' joined room ' + room);
-		socket.broadcast.emit('broadcast(): client ' + socket.username + ' joined room ' + room);
+		socket.emit('emit(): client ' + socket.id + ' joined room ' + room);
+		socket.broadcast.emit('broadcast(): client ' + socket.id + ' joined room ' + room);
 	});
 });

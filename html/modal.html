@@ -2,52 +2,23 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<center><h1><strong>WEBGL</strong>Pong</h1></center>
+				<h1>
+					<center>
+						<a href="#"><img src="../img/logo.png"></a>
+						<strong>WEBGL</strong>Pong
+					</center>
+				</h1>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
-			    <label for="username">Username</label>
-			    <div class="input-group">
-	  				<span class="input-group-addon">
-	  					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-	  				</span>
-  					<input id="username" type="text" class="form-control" placeholder="Username">
-					</div>
-			  </div>
 			  <div class="form-group">
-			    <label for="room">Room</label>
-			    <div class="input-group">
-	  				<span class="input-group-addon">
-	  					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-	  				</span>
-  					<input id="room" type="text" class="form-control" placeholder="Room">
+					<center><h3>Create a room and play together</h3></center>
+					<div class="input-group">
+						<input id="room" type="text" class="form-control" placeholder="Enter room...">
+						<span class="input-group-btn">
+							<button class="btn btn-primary" type="button" onclick="enterRoom()">Create</button>
+						</span>
 					</div>
 			  </div>
-			</div>
-			<div class="modal-footer">
-				<center>
-					<button id="btn-friend" onclick="enterRoom()" class="btn btn-success btn-lg">
-						ENTER 
-						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-					</button>
-				</center>	
-      </div>
-		</div>
-	</div>
-</div>
-
-<div id = "modal-wait" class="modal" hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h2 class="modal-title">Waiting...</h2>
-			</div>
-			<div class="modal-body">
-				<div class="progress">
-					<div class="progress-bar progress-bar-info progress-bar-striped active"
-						style="width:100%">
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
