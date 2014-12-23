@@ -24,7 +24,7 @@ var WebRTCPeerStreaming = (function () {
 			});
 
 			socket.on('join', function (room, clientID) {
-				console.log('Another peer made a request to join room', room, 'with client ID', clientName);
+				console.log('Another peer made a request to join room', room, 'with client ID', clientID);
 				console.log('This peer is the initiator of room', room);
 			});
 
