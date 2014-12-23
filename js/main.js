@@ -24,7 +24,10 @@ function loadContent(content) {
 			alert("Sorry but there was an error: ");
 		};
 
-		$('#'+ content).modal('show');
+		$('#'+ content).modal({
+			show: true,
+			backdrop: 'static'
+		});
 	});
 };
 
