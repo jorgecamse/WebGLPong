@@ -18,61 +18,6 @@ var Settings = {
 	}
 }
 
-function loadModal(content) {
-	$("#modal-container").load("../html/modal.html #" + content, function(response, status, xhr) {
-		if ( status == "error" ) {
-			alert("Sorry but there was an error: ");
-		};
-
-		updatePlaceHolder();
-
-		$('#'+ content).modal({
-			show: true,
-			backdrop: 'static'
-		});
-	});
-};
-
-function showAlert(content, callback) {
-	$("#panel-alerts").load("../html/modal.html #" + content, function(response, status, xhr) {
-		if ( status == "error" ) {
-			alert("Sorry but there was an error: ");
-		};
-
-		$('#'+ content).show();
-
-		if(callback){
-			callback();
-		};
-	});
-};
-
-function hideAlert(content) {
-	$('#'+ content).hide();
-};
-
-var totalTime = 5;
-
-function countDown(){
-  document.getElementById('CuentaAtras').innerHTML = totalTime;
-
-  if(totalTime==0){
-		hideAlert('alert-connected');
-		WebGLGame.play();
-	} else {
-		totalTime-=1;
-		setTimeout("countDown()",1000);
-  };
-};
-
-function randomToken() {
-  return Math.floor((1 + Math.random()) * 1e16).toString(16).substring(1);
-}
-
-function updatePlaceHolder() {
-	$('#room').attr("placeholder", randomToken());
-};
-
 function enterRoom(url) {
 	if (!url) {
 		room = $('#room').val();
@@ -83,16 +28,11 @@ function enterRoom(url) {
 
 	window.location.hash = room;
 	$('#modal-index').modal('hide');
-	updateRoomURL();
+	Helper.updateRoomURL(room);
 
-	WebRTCPeerStreaming.initPeerIface(room);
+	nd = WebRTCStreaming.start(localVideo, remoteVideo);
+	nd.joinRoom(room);
 };
-
-function updateRoomURL() {
-  var url = location.host + '/#' + room;
-  $('#facetime-icon').css('visibility', 'visible');
-  roomURL.innerHTML = url;
-}
 
 $(document).ready(function() {
 	localVideo = document.getElementById('localVideo');
@@ -102,10 +42,9 @@ $(document).ready(function() {
 	canvas.width =  window.innerWidth / 1.7;
 	canvas.height =  window.innerHeight;
 
-	roomURL = document.getElementById('url');
 	room = window.location.hash.substring(1);
 	if (!room) {
-		loadModal("modal-index");
+		Helper.loadModal("modal-index");
 	} else {
 		enterRoom(room);
 	};

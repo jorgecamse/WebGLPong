@@ -59,7 +59,7 @@
 	WebRTCPeer.prototype.createConnection = function (isInitiator) {
 		this.isInitiator = isInitiator;
 
-		showAlert('alert-connecting');
+		Helper.showAlert('alert-connecting');
 		console.log('Created Peer connection as initiator?', this.isInitiator,
 			'  config: \'' + JSON.stringify(this.config.server) + '\';\n' +
 			'  options: \'' + JSON.stringify(this.config.options) + '\'.');
@@ -144,7 +144,9 @@
 	WebRTCPeer.prototype.addDataChannelListeners = function() {
 		self.dataChannel.onopen = function () {
 			console.log('Data channel state is: ' + self.dataChannel.readyState);
-			showAlert('alert-connected', WebGLGame.start);
+			WebGLGame.start(function() {
+				Helper.showAlert('alert-connected', Helper.countDown);
+			});
 		};
 
 		self.dataChannel.onclose = function () {
