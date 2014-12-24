@@ -1,38 +1,17 @@
 /**
- * WebRTC Peer module
+ * WebRTCPeer Module
  */
-var WebRTCPeer = (function () {
+ var WebRTCPeer = (function () {
 
 	var module = {};
 
-	var peer;
-
-	var peerConnection;
+	var self;
 
 	/* Default handler for error callbacks */
-	function defaultError(error) {
+	function logError(error) {
 		if (error) {
 			console.log(error.toString(), error);
 		}
-	};
-
-	/* Send SDP offer to signaling server */
-	function sendOffer(description) {
-		peer.iface.sendMessage(description);
-		console.log('Sended SDP offer:', description);
-	};
-
-	/* Send ICE candidate to signaling server */
-	function sendCandidate(candidate) {
-		var message = {
-			type: 'candidate',
-			label: candidate.sdpMLineIndex,
-			id: candidate.sdpMid,
-			candidate: candidate.candidate
-    };
-
-		peer.iface.sendMessage(message);
-		console.log('Sended ICE candidate:', candidate);
 	};
 
 	/* Modify SDP bandwidth */
@@ -46,184 +25,157 @@ var WebRTCPeer = (function () {
 		return sdp;
 	};
 
-	/**************************************************************************** 
- 	 * Peer Object
- 	 ****************************************************************************/
-	Peer = function(localVideo, remoteVideo, isInitiator, iface) {
-		this.localVideo = localVideo;
-		this.remoteVideo = remoteVideo;
-		this.isInitiator = isInitiator;
-		this.iface = iface;
+	function WebRTCPeer(opts) {
+		self = this;
+		var options = opts || {};
+		var config = this.config = {
+						// Default ICE server
+						server: {
+								iceServers: [{"url": "stun:stun.l.google.com:19302"}]
+						},
+						// Default RTCPeerConnection options
+						options: {
+								optional: [
+										{DtlsSrtpKeyAgreement: true},
+										{RtpDataChannels: true}
+								]
+						},
+						// Default offer SDP constrains
+						constraints: {
+								mandatory: {
+										OfferToReceiveAudio: true,
+										OfferToReceiveVideo: true
+								}
+						}
+		};
+
+		// set options
+		for (item in options) {
+				this.config[item] = options[item];
+		}
 	};
 
-	/* Create the RTCPeerConnection object and starts the SDP negotiation process */
-	Peer.prototype.start = function() {
+	/* Create the RTCPeerConnection and starts the SDP negotiation process */
+	WebRTCPeer.prototype.createConnection = function (isInitiator) {
+		this.isInitiator = isInitiator;
+
 		showAlert('alert-connecting');
-		console.log('Creating Peer connection as initiator?', this.isInitiator,
-			'  config: \'' + JSON.stringify(this.server) + '\';\n' +
-			'  constraints: \'' + JSON.stringify(this.options) + '\'.');
+		console.log('Created Peer connection as initiator?', this.isInitiator,
+			'  config: \'' + JSON.stringify(this.config.server) + '\';\n' +
+			'  options: \'' + JSON.stringify(this.config.options) + '\'.');
 
-		peerConnection = new RTCPeerConnection(this.server, this.options);
+		this.pc = new RTCPeerConnection(this.config.server, this.config.options);
 
-		peerConnection.onicecandidate = function(event) {
-			console.log('onIceCandidate event:', event);
-			if (event.candidate) {
-				sendCandidate(event.candidate);
-			} else {
-				console.log('End of candidates');
-			}
-		};
+		this.pc.onicecandidate = this.handleIceCandidate;
 
-		peerConnection.onaddstream = function(event) {
-			peer.remoteVideo.src = URL.createObjectURL(event.stream);
-    	console.log('Remote stream URL:', peer.remoteVideo.src);
-		};
+		this.pc.onaddstream = this.handleAddRemoteStream;
 
-		peerConnection.addStream(peer.stream);
+		this.pc.addStream(this.stream);
 
 		if (this.isInitiator) {
-			peer.dataChannel = peerConnection.createDataChannel("datachannel_" + room, {reliable: false});
-			console.log('Created Data Channel ' + peer.dataChannel.label);
-			this.addDataChannelListeners(peer.dataChannel);
+			this.dataChannel = this.pc.createDataChannel("datachannel_" + this.roomName, {reliable: false});
+			console.log('Created Data Channel ' + this.dataChannel.label);
+			this.addDataChannelListeners();
 
-			this.constraints = {
-				mandatory : {
-					OfferToReceiveAudio : true,
-					OfferToReceiveVideo : true
-				}
-			};
-
-			peerConnection.createOffer(this.onLocalSession, defaultError, this.constraints);
-    } else {
-    	peerConnection.ondatachannel = function(event) {
-				console.log('onDataChannel event:', event.channel);
-				peer.dataChannel = event.channel;
-				peer.addDataChannelListeners(peer.dataChannel);
-			};
-    };
+			this.pc.createOffer(this.onLocalSession, logError, this.config.constraints);
+		} else {
+			this.pc.ondatachannel = this.handleDataChannel;
+		};
 	};
 
+	/* Send ICE candidate to signaling server */
+	WebRTCPeer.prototype.handleIceCandidate = function (event) {
+		console.log('onIceCandidate event:', event);
+		if (event.candidate) {
+			var message = {
+				type: 'candidate',
+				label: event.candidate.sdpMLineIndex,
+				id: event.candidate.sdpMid,
+				candidate: event.candidate.candidate
+			};
+			WebRTCStreaming.sendMessage(message);
+			console.log('Sended ICE candidate:', event.candidate);
+		} else {
+			console.log('End of candidates');
+		}
+	};
+
+	/* Once remote stream arrives, show it in the remote video element */
+	WebRTCPeer.prototype.handleAddRemoteStream = function (event) {
+		self.config.remoteVideo.src = URL.createObjectURL(event.stream);
+		console.log('Remote stream URL:', self.config.remoteVideo.src);
+	};
+
+	/* Function invoked when requesting it create offers or answers */
+	WebRTCPeer.prototype.onLocalSession = function(description) {
+		console.log('Created Local Session');
+		description.sdp = setSdpBandwidth(description.sdp);
+		self.pc.setLocalDescription(description, function() {
+			console.log('Set Local Description');
+		}, logError);
+
+		/* Send SDP offer to signaling server */
+		WebRTCStreaming.sendMessage(self.pc.localDescription);
+		console.log('Sended SDP offer:', self.pc.localDescription);
+	};
+
+	/* Function invoked when an SDP answer is received */
+	WebRTCPeer.prototype.processSdpAnswer = function(answer) {
+		var description = new RTCSessionDescription(answer);
+		console.log('SDP answer received, setting remote description');
+		this.pc.setRemoteDescription(description, function(){}, logError);
+	};
+
+	/* Respond to an offer sent from a remote connection */
+	WebRTCPeer.prototype.doAnswer = function(offer) {
+		this.pc.createAnswer(this.onLocalSession, logError, this.config.constraints);
+	}
+
 	/* Function invoked when an candidate answer is received */
-	Peer.prototype.processCandidateAnswer = function(answer) {
+	WebRTCPeer.prototype.processCandidateAnswer = function(answer) {
 		var candidate = new RTCIceCandidate({
 			sdpMLineIndex : answer.label,
 			candidate : answer.candidate
 		});
-
-		peerConnection.addIceCandidate(candidate, function(){}, defaultError);
+		this.pc.addIceCandidate(candidate, function(){}, logError);
 	};
-
-	/* Function invoked when requesting it create offers or answers */
-	Peer.prototype.onLocalSession = function(description) {
-		console.log('Created Local Session');
-		description.sdp = setSdpBandwidth(description.sdp);
-		peerConnection.setLocalDescription(description, function() {
-			console.log('Set Local Description');
-		}, defaultError);
-
-		sendOffer(peerConnection.localDescription);
-	};
-
-	/* Function invoked when an SDP answer is received */
-	Peer.prototype.processSdpAnswer = function(answer) {
-		var description = new RTCSessionDescription(answer);
-
-		console.log('SDP answer received, setting remote description');
-		peerConnection.setRemoteDescription(description, function(){}, defaultError);
-	}
-
-	/* Respond to an offer sent from a remote connection */
-	Peer.prototype.doAnswer = function(offer) {
-		peerConnection.createAnswer(this.onLocalSession, defaultError, this.constraints);
-	}
 
 	/* Data Channel event handlers */
-	Peer.prototype.addDataChannelListeners = function(channel) {
-		channel.onopen = function () {
-			console.log('Data channel state is: ' + channel.readyState);
+	WebRTCPeer.prototype.addDataChannelListeners = function() {
+		self.dataChannel.onopen = function () {
+			console.log('Data channel state is: ' + self.dataChannel.readyState);
 			showAlert('alert-connected', WebGLGame.start);
-    };
+		};
 
-    channel.onclose = function () {
-			console.log('Data channel state is: ' + channel.readyState);
-    };
+		self.dataChannel.onclose = function () {
+			console.log('Data channel state is: ' + self.dataChannel.readyState);
+		};
 
-    channel.onmessage =  function (event) {
+		self.dataChannel.onmessage =  function (event) {
 			var data = JSON.parse(event.data);
 			//console.log('Received message: ' + data);
 
 			WebGLGame.onReceiveData(data);
-    };
+		};
 	};
 
-	Peer.prototype.sendData = function(data) {
-    //console.log('Sending ' + data);
-    this.dataChannel.send(JSON.stringify(data));
+	/* Send Data */
+	WebRTCPeer.prototype.sendData = function(data) {
+		//console.log('Sending ' + data);
+		this.dataChannel.send(JSON.stringify(data));
 	};
 
-	/* Default user media constraints */
-	Peer.prototype.userMediaConstraints = {
-		audio : true,
-		video : {
-			mandatory : {
-				maxWidth : 320,
-				maxHeight : 640,
-				maxFrameRate : 15,
-				minFrameRate : 15
-			}
-		}
+	/* Processing a new data channel received and setup event handlers */
+	WebRTCPeer.prototype.handleDataChannel = function(event) {
+		console.log('onDataChannel event:', event.channel);
+		self.dataChannel = event.channel;
+		self.addDataChannelListeners();
 	};
 
-	/* Default ICE server */
-	Peer.prototype.server = {
-		iceServers : [ {
-			url : 'stun:stun.l.google.com:19302'
-		} ]
-	};
-
-	/* Default options for RTCPeerConnection */
-	Peer.prototype.options = {
-		optional : [ {
-			DtlsSrtpKeyAgreement : true
-		},
-		{
-			RtpDataChannels: true
-		}]
-	};
-
-	/* Function invoked when passing the local media stream object */
-	Peer.prototype.onUserMedia = function(localStream) {
-		peer.localVideo.src = URL.createObjectURL(localStream);
-		peer.localVideo.muted = true;
-		peer.stream = localStream;
-		console.log('getUserMedia video stream URL:', peer.localVideo.src);
-
-		peer.localVideo.oncanplay = function(e) {
-			$('#modal-wait').modal('hide');
-    };
-
-		peer.iface.sendMessage({
-			type: 'media'
-		});
-	};
-
-	/* Created the Peer object and obtain userMedia */
-	module.start = function(localVideo, remoteVideo, isInitiator, iface) {
-		peer = new Peer(localVideo, remoteVideo, isInitiator, iface);
-
-		var constraints = peer.userMediaConstraints;
-
-		getUserMedia(constraints, peer.onUserMedia, defaultError);
-
-		return peer;
-  };
-
-	module.get = function() {
-		if (!peer)
-			throw ("Peer is not initialized");
-
-		return peer;
-  };
+	module.new = function(opts) {
+		return new WebRTCPeer(opts);
+	}
 
 	return module;
+
 }());
