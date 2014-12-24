@@ -107,8 +107,9 @@
 		};
 	};
 
-	module.start = function() {
-		peer = WebRTCPeer.get();
+	module.start = function(p, callback) {
+
+		peer = p;
 
 		function initBrowser(images) {
 			// Initialize the GL context
@@ -121,7 +122,7 @@
 				WebGLUtils.initViewport();
 				WebGLUtils.initMatrix();
 				WebGLUtils.setupTextures(images);
-				objectsGL = WebGLObjects.start(countDown);
+				objectsGL = WebGLObjects.start(callback);
 			}
 		};
 

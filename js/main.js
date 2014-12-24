@@ -18,8 +18,8 @@ var Settings = {
 	}
 }
 
-function enterRoom(url) {
-	if (!url) {
+function enterRoom(room) {
+	if (!room) {
 		room = $('#room').val();
 		if(!room) {
 			room = $('#room').attr("placeholder");
@@ -30,7 +30,7 @@ function enterRoom(url) {
 	$('#modal-index').modal('hide');
 	Helper.updateRoomURL(room);
 
-	nd = WebRTCStreaming.start(localVideo, remoteVideo);
+	var nd = WebRTCStreaming.start(localVideo, remoteVideo);
 	nd.joinRoom(room);
 };
 
@@ -42,7 +42,7 @@ $(document).ready(function() {
 	canvas.width =  window.innerWidth / 1.7;
 	canvas.height =  window.innerHeight;
 
-	room = window.location.hash.substring(1);
+	var room = window.location.hash.substring(1);
 	if (!room) {
 		Helper.loadModal("modal-index");
 	} else {

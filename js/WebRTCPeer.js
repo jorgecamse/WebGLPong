@@ -144,7 +144,7 @@
 	WebRTCPeer.prototype.addDataChannelListeners = function() {
 		self.dataChannel.onopen = function () {
 			console.log('Data channel state is: ' + self.dataChannel.readyState);
-			WebGLGame.start(function() {
+			WebGLGame.start(self, function() {
 				Helper.showAlert('alert-connected', Helper.countDown);
 			});
 		};
