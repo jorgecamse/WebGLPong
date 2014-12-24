@@ -91,7 +91,9 @@
 			animateScene();
 			send();
 			drawScene();
-			requestAnimationFrame(animLoop);
+			setTimeout(function() {
+				animLoop();
+			}, 35);
 		})();
 	};
 

@@ -6,7 +6,7 @@ var Settings = {
 	},
 	ball: {
 	    width: 1.0 / 30.0,
-	    speed: 0.008,
+	    speed: 0.01,
 	    texture: 1
 	},
 	paddle: {
