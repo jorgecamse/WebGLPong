@@ -1,6 +1,6 @@
 .camera {
-  width: 177px;
-  height: 160px;
+  width: 200px;
+  min-height: 160px;
   display: inline-block;
   margin: 10px;
 }
