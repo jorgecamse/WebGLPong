@@ -174,6 +174,11 @@
 		self.addDataChannelListeners();
 	};
 
+	WebRTCPeer.prototype.closeConnection = function () {
+		this.pc.close();
+		console.log('Closed peer connection');
+	};
+
 	module.new = function(opts) {
 		return new WebRTCPeer(opts);
 	}

@@ -9,6 +9,8 @@
 
 	var peer;
 
+	var running;
+
 	var sources_textures = [
 		"./textures/field.jpg",
 		"./textures/ball.jpg",
@@ -91,7 +93,7 @@
 			animateScene();
 			send();
 			drawScene();
-			setTimeout(function() {
+			running = setTimeout(function() {
 				animLoop();
 			}, 35);
 		})();
@@ -127,6 +129,10 @@
 		};
 
 		loadTextures(sources_textures, initBrowser);
+	};
+
+	module.stop = function() {
+		clearTimeout(running);
 	};
 
 	return module;

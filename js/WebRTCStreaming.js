@@ -19,6 +19,7 @@
 	/* Signaling message received */
 	function signalingMessage(message) {
 		if (message.type == "media") {
+			self.isInitiator = true;
 			self.peer.createConnection(self.isInitiator);
 		} else if (message.type == "offer") {
 			self.peer.createConnection(self.isInitiator);
@@ -33,11 +34,17 @@
 		}
   };
 
+	function disconnectPeer() {
+		self.peer.closeConnection();
+		WebGLGame.stop();
+		WebGLUtils.clear();
+		self.peer.config.remoteVideo.src = '';
+	};
+
 	/* Signaling server event handlers */
 	function addConnectionListeners() {
 		connection.on('created', function (room, clientID) {
 			console.log('Created room', room, '- my client ID is', clientID);
-			self.isInitiator = true;
 		});
 
 		connection.on('join', function (room, clientID) {
@@ -62,6 +69,11 @@
 		connection.on('message', function (message){
 			console.log('Client received message:', message);
 			signalingMessage(message);
+		});
+
+		connection.on('disconnected', function (clientID){
+			console.log('Client disconnected:', clientID);
+			disconnectPeer();
 		});
 	};
 

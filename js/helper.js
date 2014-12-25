@@ -45,6 +45,7 @@
 	  if(totalTime == 0){
 	  	$('#alert-connected').hide();
 			WebGLGame.play();
+			totalTime = 5;
 		} else {
 			totalTime -= 1;
 			setTimeout("Helper.countDown()", 1000);
