@@ -133,7 +133,7 @@ var WebGLObjects = (function () {
 		}
 	};
 
-	module.start = function(p, callback) {
+	module.start = function(p) {
 		gl = WebGLUtils.getGL();
 		glProgram = WebGLUtils.getGLProgram();
 		textures = WebGLUtils.getGLTextures();
@@ -161,8 +161,6 @@ var WebGLObjects = (function () {
 				Settings.field.height / 2.0 - 3.5*Settings.paddle.height, Settings.paddle.speed,
 				buffers.paddle.vertex, buffers.paddle.vindex, buffers.paddle.vtexture,
 				Settings.paddle.texture2, buffers.paddle.vnormal);
-
-		callback();
 
 		return objects;
   };

@@ -128,7 +128,11 @@
 					WebGLUtils.initMatrix((-3*Math.PI/8.0)+2*Math.PI/18.0, Math.PI);
 				}
 				WebGLUtils.setupTextures(images);
-				objectsGL = WebGLObjects.start(p, callback);
+				objectsGL = WebGLObjects.start(p);
+
+				if (callback){
+					callback();
+				}
 			}
 		};
 

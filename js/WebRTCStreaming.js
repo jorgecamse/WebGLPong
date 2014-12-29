@@ -21,6 +21,7 @@
 		if (message.type == "media") {
 			self.isInitiator = true;
 			self.peer.createConnection(self.isInitiator);
+			WebGLGame.start(self.peer);
 		} else if (message.type == "offer") {
 			self.peer.createConnection(self.isInitiator);
 	    self.peer.processSdpAnswer(message);
@@ -37,6 +38,7 @@
 	function disconnectPeer() {
 		self.peer.closeConnection();
 		WebGLGame.stop();
+		$('#canvasgl').hide();
 		WebGLUtils.clear();
 		self.peer.config.remoteVideo.src = '';
 	};
@@ -69,6 +71,13 @@
 		connection.on('message', function (message){
 			console.log('Client received message:', message);
 			signalingMessage(message);
+		});
+
+		connection.on('play', function (){
+			Helper.hideAlert('alert-connected');
+			$('#canvasgl').show();
+			Helper.stopSpinner();
+			WebGLGame.play();
 		});
 
 		connection.on('disconnected', function (clientID){
@@ -145,6 +154,11 @@
 	module.sendMessage = function(message) {
 		console.log('Client sending message: ', message);
 		connection.emit('message', message);
+	};
+
+	module.sendReadyToPlay = function() {
+		console.log('Client sending ready to play message');
+		connection.emit('ready to play');
 	};
 
 	return module;

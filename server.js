@@ -49,6 +49,10 @@ io.sockets.on('connection', function (socket){
 		socket.broadcast.emit('broadcast(): client ' + socket.id + ' joined room ' + room);
 	});
 
+	socket.on('ready to play', function () {
+		io.sockets.in(socket.room).emit('play');
+	});
+
 	socket.on('disconnect', function () {
 		socket.leave(socket.room);
 		io.sockets.in(socket.room).emit('disconnected', socket.id);

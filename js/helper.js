@@ -38,18 +38,8 @@
 		});
 	};
 
-	var totalTime = 5;
-	module.countDown = function() {
-	  document.getElementById('count').innerHTML = totalTime;
-
-	  if(totalTime == 0){
-	  	$('#alert-connected').hide();
-			WebGLGame.play();
-			totalTime = 5;
-		} else {
-			totalTime -= 1;
-			setTimeout("Helper.countDown()", 1000);
-	  };
+	module.hideAlert = function(id) {
+		$('#' + id).hide();
 	};
 
 	module.updatePlaceHolder = function() {
@@ -61,7 +51,28 @@
 	  var url = location.host + '/#' + room;
 	  $('#facetime-icon').css('visibility', 'visible');
 	  roomURL.innerHTML = url;
-	}
+	};
+
+	module.initSpinner = function() {
+		$('#spinner').show();
+		$('#spinner').css('width', canvas.width);
+		$('#spinner').css('height', canvas.height);
+		var opts = {
+			lines: 15,
+			length: 20,
+			width: 6,
+			radius: 20,
+			color: '#77D',
+			speed: 2,
+			top: 350
+		};
+		new Spinner(opts).spin(document.getElementById('spinner'));
+	};
+
+	module.stopSpinner = function() {
+		$('#spinner').hide();
+		$('.spinner').remove();
+	};
 
 	return module;
 
