@@ -11,6 +11,8 @@ var WebGLObjects = (function () {
 
 	var matrix;
 
+	var peer;
+
 	var objects = {};
 
 	function ObjGL(width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff){
@@ -92,32 +94,46 @@ var WebGLObjects = (function () {
 
 		// move right
 		if (Key.isDown(Key.RIGHT) || (Key.isDown(Key.D))) {
-			if (this.posX <= limitX) {
-				// update paddle position
-				this.posX += this.speed;
+			if (peer.isInitiator) {
+				if (this.posX <= limitX) {
+					// update paddle position
+					this.posX += this.speed;
+				}
+			} else {
+				if (this.posX >= -limitX) {
+					// update paddle position
+					this.posX -= this.speed;
+				}
 			}
+
 		}
 		// move left
 		else if (Key.isDown(Key.LEFT) || (Key.isDown(Key.A))) {
-			if (this.posX >= -limitX) {
-				// update paddle position
-				this.posX -= this.speed;
+			if (peer.isInitiator) {
+				if (this.posX >= -limitX) {
+					// update paddle position
+					this.posX -= this.speed;
+				}
+			} else {
+				if (this.posX <= limitX) {
+					// update paddle position
+					this.posX += this.speed;
+				}
 			}
 		}
 	};
 
 	Paddle.prototype.logic = function() {
-		if (objects.ball.posX <= this.posX + Settings.paddle.width / 2.0  &&
-			objects.ball.posX >= this.posX - Settings.paddle.width / 2.0) {
-				if (objects.ball.posY - Settings.ball.width / 2.0 <=  this.posY + Settings.paddle.height / 2.0 &&
-					objects.ball.posY + Settings.ball.width / 2.0 >=  this.posY + Settings.paddle.height / 2.0) {
+		if (objects.ball.posX >= this.posX - Settings.paddle.width &&
+				objects.ball.posX <= this.posX + Settings.paddle.width &&
+				objects.ball.posY >=  this.posY - Settings.paddle.height &&
+				objects.ball.posY <=  this.posY + Settings.paddle.height ) {
 						objects.ball.DirX = -objects.ball.DirX;
 						objects.ball.DirY = -this.posY * 0.7;
-				}
 		}
 	};
 
-	module.start = function(callback) {
+	module.start = function(p, callback) {
 		gl = WebGLUtils.getGL();
 		glProgram = WebGLUtils.getGLProgram();
 		textures = WebGLUtils.getGLTextures();
@@ -125,6 +141,8 @@ var WebGLObjects = (function () {
 		matrix = WebGLUtils.getMatrix();
 
 		var buffers = WebGLBuffers.get();
+
+		peer = p;
 
 		objects.field = new ObjGL(Settings.field.width, Settings.field.height, 0.0, 0.0, 
 				buffers.field.vertex, buffers.field.vindex, buffers.field.vtexture, Settings.field.texture, 
@@ -135,12 +153,12 @@ var WebGLObjects = (function () {
 				buffers.ball.vnormal);
 
 		objects.paddle1 = new Paddle(Settings.paddle.width, Settings.paddle.height, 0.0,
-				-Settings.field.height / 2.0 + 3*Settings.paddle.height, Settings.paddle.speed,
+				-Settings.field.height / 2.0 + 3.5*Settings.paddle.height, Settings.paddle.speed,
 				buffers.paddle.vertex, buffers.paddle.vindex, buffers.paddle.vtexture, 
 				Settings.paddle.texture1, buffers.paddle.vnormal);
 
 		objects.paddle2 = new Paddle(Settings.paddle.width, Settings.paddle.height, 0.0,
-				Settings.field.height / 2.0 - 5*Settings.paddle.height, Settings.paddle.speed,
+				Settings.field.height / 2.0 - 3.5*Settings.paddle.height, Settings.paddle.speed,
 				buffers.paddle.vertex, buffers.paddle.vindex, buffers.paddle.vtexture,
 				Settings.paddle.texture2, buffers.paddle.vnormal);
 

@@ -122,9 +122,13 @@
 				WebGLUtils.initShaders();
 				WebGLBuffers.init();
 				WebGLUtils.initViewport();
-				WebGLUtils.initMatrix();
+				if (peer.isInitiator){
+					WebGLUtils.initMatrix((-3*Math.PI/8.0)+2*Math.PI/18.0, 0);
+				} else {
+					WebGLUtils.initMatrix((-3*Math.PI/8.0)+2*Math.PI/18.0, Math.PI);
+				}
 				WebGLUtils.setupTextures(images);
-				objectsGL = WebGLObjects.start(callback);
+				objectsGL = WebGLObjects.start(p, callback);
 			}
 		};
 

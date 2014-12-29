@@ -125,7 +125,7 @@ var WebGLUtils = (function () {
 	/**
 	 * Initialize project, model view and normal matrix
 	 */
-	module.initMatrix = function() {
+	module.initMatrix = function(angleX, angleZ) {
 		// Create a project matrix with 45 degrees field of view
 		matrixGL.p = mat4.create();
 		mat4.perspective(45, canvas.width / canvas.height, 0.1, 100.0, matrixGL.p);
@@ -134,7 +134,8 @@ var WebGLUtils = (function () {
 		matrixGL.mv = mat4.create();
 		mat4.identity(matrixGL.mv);
 		mat4.translate(matrixGL.mv, [0.0, 0.2, -2.0]);
-		mat4.rotate(matrixGL.mv, 45, [-1.0, 0.0, 0.0]);
+		mat4.rotateX(matrixGL.mv, angleX);
+		mat4.rotateZ(matrixGL.mv, angleZ);
 
 		// Create a normal matrix
 		matrixGL.n = mat3.create();
