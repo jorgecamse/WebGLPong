@@ -58,3 +58,9 @@ body {
   visibility: hidden;
   margin-left: 15px;
 }
+
+.spinner div div {
+  border-style: double;
+  border-width: 1px;
+  border-color: black;
+}

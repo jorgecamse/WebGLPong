@@ -60,9 +60,10 @@
 		var opts = {
 			lines: 15,
 			length: 20,
-			width: 6,
+			width: 9,
 			radius: 20,
-			color: '#77D',
+			color: '#FFF',
+			className: 'spinner',
 			speed: 2,
 			top: 350
 		};
