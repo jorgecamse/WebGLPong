@@ -116,10 +116,12 @@ var WebGLUtils = (function () {
 	 * Clear the canvas before we start drawing on it
 	 */
 	module.clear = function() {
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		gl.enable(gl.DEPTH_TEST); // Enable depth testing
-		gl.clearDepth(1.0);			// Clear everything
-		gl.depthFunc(gl.LEQUAL);	// Near things obscure far things
+		if (gl) {
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			gl.enable(gl.DEPTH_TEST); // Enable depth testing
+			gl.clearDepth(1.0); // Clear everything
+			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+		}
 	};
 
 	/**

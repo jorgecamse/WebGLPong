@@ -176,8 +176,10 @@
 	};
 
 	WebRTCPeer.prototype.closeConnection = function () {
-		this.pc.close();
-		console.log('Closed peer connection');
+		if (this.pc) {
+			this.pc.close();
+			console.log('Closed peer connection');
+		}
 	};
 
 	module.new = function(opts) {
