@@ -48,9 +48,10 @@
 
 	module.updateRoomURL = function(room) {
 		var roomURL = document.getElementById('url');
-	  var url = location.host + '/#' + room;
-	  $('#facetime-icon').css('visibility', 'visible');
+	  var url = 'http://' + location.host + '/#' + room;
+	  roomURL.href = url;
 	  roomURL.innerHTML = url;
+	  $('#panel-room').show();
 	};
 
 	module.initSpinner = function() {
