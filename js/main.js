@@ -1,4 +1,8 @@
 var Settings = {
+	canvas: {
+		width: 800,
+		height: 670
+	},
 	field: {
 	    width: 1.0,
 	    height: 2.0,
@@ -38,9 +42,8 @@ $(document).ready(function() {
 	localVideo = document.getElementById('localVideo');
 	remoteVideo = document.getElementById('remoteVideo');
 	canvas = document.getElementById('canvasgl');
-
-	canvas.width =  window.innerWidth / 1.7;
-	canvas.height =  window.innerHeight;
+	canvas.width =  Settings.canvas.width;
+	canvas.height =  Settings.canvas.height;
 
 	var room = window.location.hash.substring(1);
 	if (!room) {
