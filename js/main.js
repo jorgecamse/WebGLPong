@@ -7,14 +7,14 @@ var Settings = {
 	ball: {
 	    width: 1.0 / 30.0,
 	    speed: 0.01,
-	    texture: 1
+	    texture: 2
 	},
 	paddle: {
 	    width: 1.0 / 10,
 	    height: 1.0 / 30.0,
 	    speed: 0.01,
-	    texture1: 2,
-	    texture2: 3
+	    texture1: 3,
+	    texture2: 4
 	}
 }
 

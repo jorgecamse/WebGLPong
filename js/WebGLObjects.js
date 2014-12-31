@@ -15,7 +15,7 @@ var WebGLObjects = (function () {
 
 	var objects = {};
 
-	function ObjGL(width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff){
+	function ObjGL(width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff, ibuffextra){
 		this.width = width;
 		this.height = height;
 		this.posX = x;
@@ -25,6 +25,7 @@ var WebGLObjects = (function () {
 		this.txtbuff = txtbuff;
 		this.txtid = txtid;
 		this.nbuff = nbuff;
+		this.ibuffextra = ibuffextra;
 	};
 
 	ObjGL.prototype.draw = function() {
@@ -55,6 +56,14 @@ var WebGLObjects = (function () {
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ibuff);
 		gl.drawElements(gl.TRIANGLES, this.ibuff.number_vertex_points, gl.UNSIGNED_SHORT, 0);
+
+		if (this.ibuffextra) {
+			gl.activeTexture(gl.TEXTURE0 + this.txtid + 1);
+			gl.bindTexture(gl.TEXTURE_2D, textures[this.txtid + 1]);
+			gl.uniform1i(glProgram.samplerUniform, this.txtid + 1);
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ibuffextra);
+			gl.drawElements(gl.TRIANGLES, this.ibuffextra.number_vertex_points, gl.UNSIGNED_SHORT, 0);
+		}
 
 		WebGLUtils.popMatrix();
 	};
@@ -146,7 +155,7 @@ var WebGLObjects = (function () {
 
 		objects.field = new ObjGL(Settings.field.width, Settings.field.height, 0.0, 0.0, 
 				buffers.field.vertex, buffers.field.vindex, buffers.field.vtexture, Settings.field.texture, 
-				buffers.field.vnormal);
+				buffers.field.vnormal, buffers.field.vindexextra);
 
 		objects.ball = new Ball(Settings.ball.width, Settings.ball.width, 0.0, 0.0, Settings.ball.speed, 
 				buffers.ball.vertex, buffers.ball.vindex, buffers.ball.vtexture, Settings.ball.texture,

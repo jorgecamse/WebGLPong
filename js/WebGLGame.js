@@ -12,7 +12,8 @@
 	var running;
 
 	var sources_textures = [
-		"./textures/field.jpg",
+		"./textures/field_wall.jpg",
+		"./textures/field_floor.jpg",
 		"./textures/ball.jpg",
 		"./textures/paddle1.jpg",
 		"./textures/paddle2.jpg"

@@ -117,6 +117,15 @@ var WebGLBuffers = (function () {
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(fieldVertexIndex), gl.STATIC_DRAW);
 		buffers.field.vindex = fieldVertexIndexBuffer;
 
+		var fieldVertexIndexExtra = [
+			4,  5,  6,    4,  6,  7,    // back
+		];
+		var fieldVertexIndexBufferExtra = gl.createBuffer();
+		fieldVertexIndexBufferExtra.number_vertex_points = fieldVertexIndexExtra.length;
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, fieldVertexIndexBufferExtra);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(fieldVertexIndexExtra), gl.STATIC_DRAW);
+		buffers.field.vindexextra = fieldVertexIndexBufferExtra;
+
 		// Field normal buffer
 		var fieldVertexNormals = calculateVertexNormal(fieldVertex, fieldVertexIndex);
 
