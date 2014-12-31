@@ -63,3 +63,7 @@ body {
   border-width: 1px;
   border-color: black;
 }
+
+.modal-footer li {
+  display: inline-block;
+}

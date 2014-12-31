@@ -23,6 +23,18 @@
 					</div>
 			  </div>
 			</div>
+			<div class="modal-footer">
+				<center>
+					<p>
+						Code licensed under <a href="https://github.com/jcamposs/webglpong/blob/master/LICENSE"
+						target="_blank">GNU</a>, documentation under <a href="http://creativecommons.org/licenses/by/4.0/">
+						CC BY 4.0</a>.
+					</p>
+					<li><a href="https://github.com/jcamposs/webglpong">Github</a></li>
+					<li>&middot;</li>
+					<li><a href="javascript: Helper.loadModal('modal-about')">About</a></li>
+				<center>
+			</div>
 		</div>
 	</div>
 </div>
@@ -33,4 +45,38 @@
 
 <div id="alert-connected" class="alert alert-info" role="alert">
 	<strong>Connection established!</strong>
+</div>
+
+<div id = "modal-about" class="modal fade" hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1>
+						<a href="#"><img src="../img/logo.png"></a>
+						About
+				</h1>
+			</div>
+			<div class="modal-body">
+				<blockquote>
+					<strong>WEBGLPong</strong><br>
+					<p class="text-justify">
+						WEBGLPong is a game that you can play face-to-face against your friend.
+						It is developed with WebRTC and open web technology that enable video chat
+						directly from the browser without installing plugins.
+						WEBGLPong graphs are processed with WebGL.
+					</p>
+				</blockquote>
+				<blockquote>
+					<address>
+						<strong>Developers</strong><br>
+						<p>Jorge Campos Serrano</p>
+						<a href="mailto:#">jorge.camposserrano@gmail.com</a>
+					</address>
+				</blockquote>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-info" type="button" onclick="Helper.loadModal('modal-index')">Back</button>
+			</div>
+		</div>
+	</div>
 </div>
