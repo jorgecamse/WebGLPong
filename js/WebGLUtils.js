@@ -130,10 +130,11 @@ var WebGLUtils = (function () {
 		matrixGL.p = mat4.create();
 		mat4.perspective(45, canvas.width / canvas.height, 0.1, 100.0, matrixGL.p);
 
-		// Create a model view matrix with camera at 0, 0.2, −2.5 and rotate 50 degrees around the X axis
+		// Create a model view matrix with camera at 0.0, 0.0, −2.0, rotate angleX degrees around the X axis
+		// and rotate angleZ degrees around the Z axis
 		matrixGL.mv = mat4.create();
 		mat4.identity(matrixGL.mv);
-		mat4.translate(matrixGL.mv, [0.0, 0.2, -2.0]);
+		mat4.translate(matrixGL.mv, [0.0, 0.0, -2.0]);
 		mat4.rotateX(matrixGL.mv, angleX);
 		mat4.rotateZ(matrixGL.mv, angleZ);
 

@@ -70,10 +70,10 @@ var WebGLBuffers = (function () {
 			-fw,  fh,  0.0,
 
 			// Back face
-			-fw, -fh, -fd,
-			-fw,  fh, -fd,
-			fw,  fh, -fd,
-			fw, -fh, -fd,
+			-fw, -fh, -fd / 1.5,
+			-fw,  fh, -fd / 1.5,
+			fw,  fh, -fd / 1.5,
+			fw, -fh, -fd / 1.5,
 
 			// Top face
 			-fw,  fh, -fd,
