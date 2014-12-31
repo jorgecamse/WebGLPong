@@ -177,8 +177,10 @@
 
 	WebRTCPeer.prototype.closeConnection = function () {
 		if (this.pc) {
-			this.pc.close();
-			console.log('Closed peer connection');
+			if (this.pc.signalingState == "stable") {
+				this.pc.close();
+				console.log('Closed peer connection');
+			}
 		}
 	};
 
