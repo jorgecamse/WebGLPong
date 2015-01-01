@@ -41,6 +41,7 @@
 		$('#canvasgl').hide();
 		WebGLUtils.clear();
 		self.peer.config.remoteVideo.src = '';
+		WebGLGame.resetScore();
 	};
 
 	/* Signaling server event handlers */
@@ -73,11 +74,17 @@
 			signalingMessage(message);
 		});
 
-		connection.on('play', function (){
-			Helper.hideAlert('alert-connected');
-			$('#canvasgl').show();
-			Helper.stopSpinner();
-			WebGLGame.play();
+		connection.on('sync', function (message){
+			if (message.type == "play") {
+				Helper.hideAlert('alert-connected');
+				$('#canvasgl').show();
+				Helper.stopSpinner();
+				WebGLGame.play();
+			} else if (message.type == "score") {
+				WebGLGame.Scored(message.player);
+			} else {
+				console.log("Invalid message type " + message.type);
+			}
 		});
 
 		connection.on('disconnected', function (clientID){
@@ -156,9 +163,9 @@
 		connection.emit('message', message);
 	};
 
-	module.sendReadyToPlay = function() {
-		console.log('Client sending ready to play message');
-		connection.emit('ready to play');
+	module.sendMessageSync = function(message) {
+		console.log('Client sending sync message');
+		connection.emit('sync', message);
 	};
 
 	return module;

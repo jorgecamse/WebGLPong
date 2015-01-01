@@ -89,8 +89,13 @@ var WebGLObjects = (function () {
 		if (this.posX >= limitX || this.posX <= -limitX) {
 			this.DirX = -this.DirX;
 		}
-		if (this.posY >= limitY || this.posY <= -limitY) {
+		if (this.posY >= limitY) {
 			this.DirY = -this.DirY;
+			WebRTCStreaming.sendMessageSync({type: 'score', player: '1'})
+		}
+		if (this.posY <= -limitY) {
+			this.DirY = -this.DirY;
+			WebRTCStreaming.sendMessageSync({type: 'score', player: '2'})
 		}
 
 		// update ball position

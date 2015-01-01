@@ -146,7 +146,7 @@
 			console.log('Data channel state is: ' + self.dataChannel.readyState);
 			Helper.showAlert('alert-connected', Helper.initSpinner);
 			if(!self.isInitiator){
-				WebGLGame.start(self, WebRTCStreaming.sendReadyToPlay);
+				WebGLGame.start(self, WebRTCStreaming.sendMessageSync);
 			}
 		};
 

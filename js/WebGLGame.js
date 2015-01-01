@@ -89,6 +89,10 @@
 		peer.sendData(data);
 	};
 
+	function updateScore(ply) {
+		$('#' + ply + 'Score').html(parseInt($('#' + ply + 'Score').text()) + 1);
+	};
+
 	module.play = function() {
 		(function animLoop() {
 			animateScene();
@@ -108,6 +112,27 @@
 			objectsGL.ball.posX = data.ball.x;
 			objectsGL.ball.posY = data.ball.y;
 		};
+	};
+
+	module.Scored = function(ply){
+		if (peer.isInitiator){
+			if (ply == '1') {
+				updateScore('local');
+			} else {
+				updateScore('remote');
+			}
+		} else {
+			if (ply == '1') {
+				updateScore('remote');
+			} else {
+				updateScore('local');
+			}
+		}
+	};
+
+	module.resetScore = function(){
+		$('#localScore').html('0');
+		$('#remoteScore').html('0');
 	};
 
 	module.start = function(p, callback) {
@@ -132,7 +157,7 @@
 				objectsGL = WebGLObjects.start(p);
 
 				if (callback){
-					callback();
+					callback(({type: 'play'}));
 				}
 			}
 		};
