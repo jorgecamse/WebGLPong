@@ -59,7 +59,7 @@
 		});
 
 		connection.on('full', function (room) {
-			alert('Room "' + room + '" is full. We will create a new room for you.');
+			alert('Room "' + room + '" is full.');
 			window.location.hash = '';
 			window.location.reload();
 		});
