@@ -124,9 +124,9 @@
 				WebGLBuffers.init();
 				WebGLUtils.initViewport();
 				if (peer.isInitiator){
-					WebGLUtils.initMatrix(-0.40*Math.PI, 0);
+					WebGLUtils.initMatrix(-0.38*Math.PI, 0);
 				} else {
-					WebGLUtils.initMatrix(-0.40*Math.PI, Math.PI);
+					WebGLUtils.initMatrix(-0.38*Math.PI, Math.PI);
 				}
 				WebGLUtils.setupTextures(images);
 				objectsGL = WebGLObjects.start(p);

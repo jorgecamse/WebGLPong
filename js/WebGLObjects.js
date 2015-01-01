@@ -15,6 +15,12 @@ var WebGLObjects = (function () {
 
 	var objects = {};
 
+	function getRandomInt(min, max) {
+		var random = Math.floor(Math.random() * (max - min)) + min;
+		if (random === 0){random += 1;}
+		return random;
+	}
+
 	function ObjGL(width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff, ibuffextra){
 		this.width = width;
 		this.height = height;
@@ -71,8 +77,8 @@ var WebGLObjects = (function () {
 	function Ball(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
 		ObjGL.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
 		this.DirX = 1;
-		this.DirY = 1;
-		this.speed = speed;
+		this.DirY = -1;
+		this.speed = speed*0.02;
 	};
 	Ball.prototype = new ObjGL();
 
@@ -88,7 +94,7 @@ var WebGLObjects = (function () {
 		}
 
 		// update ball position
-		this.posX += this.DirX * this.speed;
+		this.posX += this.DirX * this.speed / 3.0;
 		this.posY += this.DirY * this.speed;
 	}
 
@@ -99,7 +105,7 @@ var WebGLObjects = (function () {
 	Paddle.prototype = new ObjGL();
 
 	Paddle.prototype.move = function() {
-		var limitX = Settings.field.width / 2.0 - this.width;
+		var limitX = Settings.field.width / 2.0 - this.width / 1.5;
 
 		// move right
 		if (Key.isDown(Key.RIGHT) || (Key.isDown(Key.D))) {
@@ -136,9 +142,9 @@ var WebGLObjects = (function () {
 		if (objects.ball.posX >= this.posX - Settings.paddle.width &&
 				objects.ball.posX <= this.posX + Settings.paddle.width &&
 				objects.ball.posY >=  this.posY - Settings.paddle.height &&
-				objects.ball.posY <=  this.posY + Settings.paddle.height ) {
-						objects.ball.DirX = -objects.ball.DirX;
-						objects.ball.DirY = -this.posY * 0.7;
+				objects.ball.posY <=  this.posY + Settings.paddle.height) {
+						objects.ball.DirX = getRandomInt(-1,1) * objects.ball.DirX;
+						objects.ball.DirY = -this.posY * 0.5;
 		}
 	};
 
@@ -162,12 +168,12 @@ var WebGLObjects = (function () {
 				buffers.ball.vnormal);
 
 		objects.paddle1 = new Paddle(Settings.paddle.width, Settings.paddle.height, 0.0,
-				-Settings.field.height / 2.0 + 3.5*Settings.paddle.height, Settings.paddle.speed,
+				-Settings.field.height / 2.0 + Settings.paddle.height, Settings.paddle.speed,
 				buffers.paddle.vertex, buffers.paddle.vindex, buffers.paddle.vtexture, 
 				Settings.paddle.texture1, buffers.paddle.vnormal);
 
 		objects.paddle2 = new Paddle(Settings.paddle.width, Settings.paddle.height, 0.0,
-				Settings.field.height / 2.0 - 3.5*Settings.paddle.height, Settings.paddle.speed,
+				Settings.field.height / 2.0 - Settings.paddle.height, Settings.paddle.speed,
 				buffers.paddle.vertex, buffers.paddle.vindex, buffers.paddle.vtexture,
 				Settings.paddle.texture2, buffers.paddle.vnormal);
 

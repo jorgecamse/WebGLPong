@@ -70,33 +70,33 @@ var WebGLBuffers = (function () {
 			-fw,  fh,  0.0,
 
 			// Back face
-			-fw, -fh, -fd / 1.5,
-			-fw,  fh, -fd / 1.5,
-			fw,  fh, -fd / 1.5,
-			fw, -fh, -fd / 1.5,
+			-fw, -fh, -fd / 2.0,
+			-fw,  fh, -fd / 2.0,
+			fw,  fh, -fd / 2.0,
+			fw, -fh, -fd / 2.0,
 
 			// Top face
+			-fw,  fh, -fd / 7.0,
 			-fw,  fh, -fd,
-			-fw,  fh,  0.0,
-			fw,  fh,  0.0,
 			fw,  fh, -fd,
+			fw,  fh, -fd / 7.0,
 
 			// Bottom face
-			-fw, -fh, -fd,
+			-fw, -fh, -fd / 7.0,
+			fw, -fh, -fd / 7.0,
 			fw, -fh, -fd,
-			fw, -fh,  0.0,
-			-fw, -fh,  0.0,
+			-fw, -fh, -fd,
 
 			// Right face
 			fw, -fh, -fd,
 			fw,  fh, -fd,
-			fw,  fh,  0.0,
-			fw, -fh,  0.0,
+			fw,  fh, -fd / 7.0,
+			fw, -fh, -fd / 7.0,
 
 			// Left face
 			-fw, -fh, -fd,
-			-fw, -fh,  0.0,
-			-fw,  fh,  0.0,
+			-fw, -fh, -fd / 7.0,
+			-fw,  fh, -fd / 7.0,
 			-fw,  fh, -fd
 		];
 		var fieldVertexBuffer = gl.createBuffer();
