@@ -42,12 +42,14 @@
 		WebGLUtils.clear();
 		self.peer.config.remoteVideo.src = '';
 		WebGLGame.resetScore();
+		Helper.showAlert('alert-waiting');
 	};
 
 	/* Signaling server event handlers */
 	function addConnectionListeners() {
 		connection.on('created', function (room, clientID) {
 			console.log('Created room', room, '- my client ID is', clientID);
+			Helper.showAlert('alert-waiting');
 		});
 
 		connection.on('join', function (room, clientID) {
