@@ -33,18 +33,20 @@ body {
   float: left;
   font-size: 100px;
   margin-top: 300px;
-  margin-left: -150px;
+  margin-left: -210px;
   background-color: white;
   color: #656565;
+  width: 200px;
 }
 
 #remoteScore {
   float: right;
   font-size: 100px;
   margin-top: 300px;
-  margin-right: -150px;
+  margin-right: -210px;
   background-color: white;
   color: #656565;
+  width: 200px;
 }
 
 .border {
