@@ -18,9 +18,11 @@
 	function setSdpBandwidth(sdp) {
 		var audioBandwidth = 50;
 		var videoBandwidth = 5000;
+		var dataBandwidth = 1638400;
 
 		sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + audioBandwidth + '\r\n');
 		sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + videoBandwidth + '\r\n');
+		sdp = sdp.replace(/a=mid:data\r\n/g , 'a=mid:data\r\nb=AS:' + dataBandwidth + '\r\n');
 
 		return sdp;
 	};
