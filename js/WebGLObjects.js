@@ -103,8 +103,22 @@ var WebGLObjects = (function () {
 		this.posY += this.DirY * this.speed;
 	}
 
-	function Paddle(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
+	Ball.prototype.reset = function(loser) {
+		this.posX = 0.0;
+		this.posY = 0.0;
+
+		if (loser == 1) {
+			this.DirY = 1;
+		} else {
+			this.DirY = -1;
+		}
+
+		this.DirX = 1;
+	}
+
+	function Paddle(id, width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
 		ObjGL.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
+		this.id = id;
 		this.speed = speed;
 	}
 	Paddle.prototype = new ObjGL();
@@ -144,12 +158,30 @@ var WebGLObjects = (function () {
 	};
 
 	Paddle.prototype.logic = function() {
-		if (objects.ball.posX >= this.posX - Settings.paddle.width &&
-				objects.ball.posX <= this.posX + Settings.paddle.width &&
-				objects.ball.posY >=  this.posY - Settings.paddle.height &&
-				objects.ball.posY <=  this.posY + Settings.paddle.height) {
-						objects.ball.DirX = getRandomInt(-1,1) * objects.ball.DirX;
-						objects.ball.DirY = -this.posY * 0.5;
+		if (objects.ball.posX + objects.ball.width/2.0 >= this.posX - Settings.paddle.width / 2.0 &&
+				objects.ball.posX - objects.ball.width/2.0 <= this.posX + Settings.paddle.width / 2.0) {
+
+				if (this.id == 1) {
+					if (objects.ball.posY + Settings.ball.width/2.0 <= this.posY + Settings.paddle.height / 2.0) {
+						objects.ball.reset(1);
+					} else {
+						if (objects.ball.posY - objects.ball.width/2.0 <= this.posY + Settings.paddle.height/2.0 &&
+								objects.ball.DirY == -1) {
+									objects.ball.DirX = getRandomInt(-1,1) * objects.ball.DirX;
+									objects.ball.DirY = -objects.ball.DirY;
+						}
+					}
+				} else {
+					if (objects.ball.posY - Settings.ball.width/2.0 >= this.posY - Settings.paddle.height / 2.0) {
+						objects.ball.reset(2);
+					} else {
+						if (objects.ball.posY + objects.ball.width/2.0 >= this.posY - Settings.paddle.height/2.0 &&
+								objects.ball.DirY == 1) {
+									objects.ball.DirX = getRandomInt(-1,1) * objects.ball.DirX;
+									objects.ball.DirY = -objects.ball.DirY;
+						}
+					}
+				}
 		}
 	};
 
@@ -172,12 +204,12 @@ var WebGLObjects = (function () {
 				buffers.ball.vertex, buffers.ball.vindex, buffers.ball.vtexture, Settings.ball.texture,
 				buffers.ball.vnormal);
 
-		objects.paddle1 = new Paddle(Settings.paddle.width, Settings.paddle.height, 0.0,
+		objects.paddle1 = new Paddle(1, Settings.paddle.width, Settings.paddle.height, 0.0,
 				-Settings.field.height / 2.0 + Settings.paddle.height, Settings.paddle.speed,
 				buffers.paddle.vertex, buffers.paddle.vindex, buffers.paddle.vtexture, 
 				Settings.paddle.texture1, buffers.paddle.vnormal);
 
-		objects.paddle2 = new Paddle(Settings.paddle.width, Settings.paddle.height, 0.0,
+		objects.paddle2 = new Paddle(2, Settings.paddle.width, Settings.paddle.height, 0.0,
 				Settings.field.height / 2.0 - Settings.paddle.height, Settings.paddle.speed,
 				buffers.paddle.vertex, buffers.paddle.vindex, buffers.paddle.vtexture,
 				Settings.paddle.texture2, buffers.paddle.vnormal);
