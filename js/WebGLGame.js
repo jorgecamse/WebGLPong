@@ -12,11 +12,11 @@
 	var running;
 
 	var sources_textures = [
-		"./textures/field_wall.jpg",
-		"./textures/field_floor.jpg",
-		"./textures/ball.jpg",
-		"./textures/paddle1.jpg",
-		"./textures/paddle2.jpg"
+		"./img/textures/field_wall.jpg",
+		"./img/textures/field_floor.jpg",
+		"./img/textures/ball.jpg",
+		"./img/textures/paddle1.jpg",
+		"./img/textures/paddle2.jpg"
 	];
 
 	function loadTextures(sources, callback){
