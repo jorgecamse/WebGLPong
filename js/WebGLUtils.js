@@ -22,7 +22,7 @@ var WebGLUtils = (function () {
 
 		$.ajax({
 		    async: false,
-		    url: './shader/' + name,
+		    url: './js/shaders/' + name,
 		    success: function (data) {
 				source = data.firstChild.textContent;
 		    },
