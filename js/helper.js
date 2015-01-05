@@ -10,7 +10,7 @@
 	}
 
 	module.loadModal = function(content) {
-		$("#modal-container").load("../html/modal.html #" + content, function(response, status, xhr) {
+		$("#modal-container").load("../html/views.html #" + content, function(response, status, xhr) {
 			if (status == "error") {
 				alert("Sorry but there was an error: ");
 			};
@@ -25,7 +25,7 @@
 	};
 
 	module.showAlert = function(content, callback) {
-		$("#panel-alerts").load("../html/modal.html #" + content, function(response, status, xhr) {
+		$("#panel-alerts").load("../html/views.html #" + content, function(response, status, xhr) {
 			if (status == "error") {
 				alert("Sorry but there was an error: ");
 			};
