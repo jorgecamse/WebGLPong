@@ -1,5 +1,5 @@
 /**
- * WebRTCPeer Module
+ * WebRTC Peer Module
  */
  var WebRTCPeer = (function () {
 
@@ -27,6 +27,7 @@
 		return sdp;
 	};
 
+	/* WebRTC peer object */
 	function WebRTCPeer(opts) {
 		self = this;
 		var options = opts || {};
@@ -177,6 +178,7 @@
 		self.addDataChannelListeners();
 	};
 
+	/* Close peer connection */
 	WebRTCPeer.prototype.closeConnection = function () {
 		if (this.pc) {
 			if (this.pc.signalingState == "stable") {
@@ -186,6 +188,7 @@
 		}
 	};
 
+	/* Create WebRTCPeer */
 	module.new = function(opts) {
 		return new WebRTCPeer(opts);
 	}
