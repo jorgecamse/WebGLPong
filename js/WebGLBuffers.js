@@ -12,44 +12,43 @@ var WebGLBuffers = (function () {
 		empty: true
 	};
 
+	/* Calculate the normal vectors */
 	function calculateVertexNormal(vertex, vertexIndex){
 		var vertexNormals = [];
 
 		for(var i=0; i<vertexIndex.length; i+=3) {
-		  var a = vertexIndex[i];
-		  var b = vertexIndex[i + 1];
-		  var c = vertexIndex[i + 2];
+			var a = vertexIndex[i];
+			var b = vertexIndex[i + 1];
+			var c = vertexIndex[i + 2];
 
-		  //normal is the cross-product
-		  var v1 = [
+			// Normal is the cross-product
+			var v1 = [
 			vertex[a*3] - vertex[b*3],
 			vertex[a*3 + 1] - vertex[b*3 + 1],
 			vertex[a*3 + 2] - vertex[b*3 + 2],
-		  ];
-		  var v2 = [
+			];
+			var v2 = [
 			vertex[a*3] - vertex[c*3],
 			vertex[a*3 + 1] - vertex[c*3 + 1],
 			vertex[a*3 + 2] - vertex[c*3 + 2],
-		  ];
+			];
 
-		  var cross = [
-				  v1[1]*v2[2] - v1[2]*v2[1],
-				  v1[2]*v2[0] - v1[0]*v2[2],
-				  v1[0]*v2[1] - v1[1]*v2[0]
-		  ];
+			var cross = [
+					v1[1]*v2[2] - v1[2]*v2[1],
+					v1[2]*v2[0] - v1[0]*v2[2],
+					v1[0]*v2[1] - v1[1]*v2[0]
+			];
 
-		  //same value for each of the three vertices
-		  vertexNormals.push.apply(vertexNormals, cross);
-		  vertexNormals.push.apply(vertexNormals, cross);
-		  vertexNormals.push.apply(vertexNormals, cross);
+			// Same value for each of the three vertices
+			vertexNormals.push.apply(vertexNormals, cross);
+			vertexNormals.push.apply(vertexNormals, cross);
+			vertexNormals.push.apply(vertexNormals, cross);
 		}
 
 		return vertexNormals;
 	};
 
-	/**
-	 * Sets up all the buffers in the current GL context
-	 */
+	/* Sets up all the buffers in the current GL context */
 	module.init = function() {
 
 		var gl = WebGLUtils.getGL();
@@ -58,33 +57,33 @@ var WebGLBuffers = (function () {
 		* Field
 		****************************************************************************/
 		var fw = Settings.field.width / 2.0;
-		var fh = Settings.field.height  / 2.0;
-		var fd = Settings.field.width  / 10.0;
+		var fh = Settings.field.height / 2.0;
+		var fd = Settings.field.width / 10.0;
 
 		// Field position buffer
 		var fieldVertex = [
 			// Front face
 			-fw, -fh,  0.0,
-			fw, -fh,  0.0,
-			fw,  fh,  0.0,
+			 fw, -fh,  0.0,
+			 fw,  fh,  0.0,
 			-fw,  fh,  0.0,
 
 			// Back face
 			-fw, -fh, -fd / 2.0,
 			-fw,  fh, -fd / 2.0,
-			fw,  fh, -fd / 2.0,
-			fw, -fh, -fd / 2.0,
+			 fw,  fh, -fd / 2.0,
+			 fw, -fh, -fd / 2.0,
 
 			// Top face
-			-fw,  fh, -fd / 7.0,
-			-fw,  fh, -fd,
-			fw,  fh, -fd,
-			fw,  fh, -fd / 7.0,
+			-fw, fh, -fd / 7.0,
+			-fw, fh, -fd,
+			 fw, fh, -fd,
+			 fw, fh, -fd / 7.0,
 
 			// Bottom face
 			-fw, -fh, -fd / 7.0,
-			fw, -fh, -fd / 7.0,
-			fw, -fh, -fd,
+			 fw, -fh, -fd / 7.0,
+			 fw, -fh, -fd,
 			-fw, -fh, -fd,
 
 			// Right face
@@ -181,41 +180,41 @@ var WebGLBuffers = (function () {
 
 		// Ball position buffer
 		var ballVertex = [
-		  // Front face
-		  -bw, -bw,  0.0,
-		   bw, -bw,  0.0,
-		   bw,  bw,  0.0,
-		  -bw,  bw,  0.0,
+			// Front face
+			-bw, -bw,  0.0,
+			 bw, -bw,  0.0,
+			 bw,  bw,  0.0,
+			-bw,  bw,  0.0,
 
-		  // Back face
-		  -bw, -bw, -bd,
-		  -bw,  bw, -bd,
-		   bw,  bw, -bd,
-		   bw, -bw, -bd,
+			// Back face
+			-bw, -bw, -bd,
+			-bw,  bw, -bd,
+			 bw,  bw, -bd,
+			 bw, -bw, -bd,
 
-		  // Top face
-		  -bw,  bw, -bd,
-		  -bw,  bw,  0.0,
-		   bw,  bw,  0.0,
-		   bw,  bw, -bd,
+			// Top face
+			-bw,  bw, -bd,
+			-bw,  bw,  0.0,
+			 bw,  bw,  0.0,
+			 bw,  bw, -bd,
 
-		  // Bottom face
-		  -bw, -bw, -bd,
-		   bw, -bw, -bd,
-		   bw, -bw,  0.0,
-		  -bw, -bw,  0.0,
+			// Bottom face
+			-bw, -bw, -bd,
+			 bw, -bw, -bd,
+			 bw, -bw,  0.0,
+			-bw, -bw,  0.0,
 
-		  // Right face
-		   bw, -bw, -bd,
-		   bw,  bw, -bd,
-		   bw,  bw,  0.0,
-		   bw, -bw,  0.0,
+			// Right face
+			 bw, -bw, -bd,
+			 bw,  bw, -bd,
+			 bw,  bw,  0.0,
+			 bw, -bw,  0.0,
 
-		  // Left face
-		  -bw, -bw, -bd,
-		  -bw, -bw,  0.0,
-		  -bw,  bw,  0.0,
-		  -bw,  bw, -bd
+			// Left face
+			-bw, -bw, -bd,
+			-bw, -bw,  0.0,
+			-bw,  bw,  0.0,
+			-bw,  bw, -bd
 		];
 		var ballVertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, ballVertexBuffer);
@@ -291,31 +290,30 @@ var WebGLBuffers = (function () {
 		var ph = Settings.paddle.height / 2.0;
 		var pd = Settings.paddle.height;
 
-
 		// Paddle position buffer
 		var paddleVertex = [
 			// Front face
 			-pw, -ph,  0.0,
-			pw, -ph,  0.0,
-			pw,  ph,  0.0,
+			 pw, -ph,  0.0,
+			 pw,  ph,  0.0,
 			-pw,  ph,  0.0,
 
 			// Back face
 			-pw, -ph, -pd,
 			-pw,  ph, -pd,
-			pw,  ph, -pd,
-			pw, -ph, -pd,
+			 pw,  ph, -pd,
+			 pw, -ph, -pd,
 
 			// Top face
 			-pw,  ph, -pd,
 			-pw,  ph,  0.0,
-			pw,  ph,  0.0,
-			pw,  ph, -pd,
+			 pw,  ph,  0.0,
+			 pw,  ph, -pd,
 
 			// Bottom face
 			-pw, -ph, -pd,
-			pw, -ph, -pd,
-			pw, -ph,  0.0,
+			 pw, -ph, -pd,
+			 pw, -ph,  0.0,
 			-pw, -ph,  0.0,
 
 			// Right face
@@ -399,12 +397,13 @@ var WebGLBuffers = (function () {
 		buffers.empty = false;
 	};
 
+	/* Returns all buffers initilized */
 	module.get = function() {
 		if (buffers.empty)
 			throw ("Buffers are not initialized");
 
 		return buffers;
-  };
+	};
 
 	return module;
 
