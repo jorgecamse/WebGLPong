@@ -15,12 +15,14 @@ var WebGLObjects = (function () {
 
 	var objects = {};
 
+	/* Get random number between min and max */
 	function getRandomInt(min, max) {
 		var random = Math.floor(Math.random() * (max - min)) + min;
 		if (random === 0){random += 1;}
 		return random;
 	}
 
+	/* Object GL */
 	function ObjGL(width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff, ibuffextra){
 		this.width = width;
 		this.height = height;
@@ -34,6 +36,7 @@ var WebGLObjects = (function () {
 		this.ibuffextra = ibuffextra;
 	};
 
+	/* Draw object GL */
 	ObjGL.prototype.draw = function() {
 		WebGLUtils.pushMatrix();
 
@@ -42,7 +45,8 @@ var WebGLObjects = (function () {
 		mat3.transpose(matrix.n);
 
 		// set the buffer to be drawn and connect up the shader parameters: 
-		// vertex position, texture coordinates and vertex normal
+		// vertex position, texture coordinates, vertex normal,
+		// projection/model/normal matrix
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.vbuff);
 		gl.vertexAttribPointer(glProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
@@ -74,6 +78,7 @@ var WebGLObjects = (function () {
 		WebGLUtils.popMatrix();
 	};
 
+	/* Ball object */
 	function Ball(width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
 		ObjGL.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
 		this.DirX = 1;
@@ -82,6 +87,7 @@ var WebGLObjects = (function () {
 	};
 	Ball.prototype = new ObjGL();
 
+	/* Move ball */
 	Ball.prototype.move = function() {
 		var limitX = Settings.field.width / 2.0 - 0.8*this.width;
 		var limitY = Settings.field.height / 2.0 - 0.8*this.width;
@@ -89,11 +95,11 @@ var WebGLObjects = (function () {
 		if (this.posX >= limitX || this.posX <= -limitX) {
 			this.DirX = -this.DirX;
 		}
-		if (this.posY >= limitY) {
+		if (this.posY >= limitY) { // Score a goal paddle1
 			this.DirY = -this.DirY;
 			WebRTCSignal.sendMessageSync({type: 'score', player: '1'})
 		}
-		if (this.posY <= -limitY) {
+		if (this.posY <= -limitY) { // Score a goal paddle2
 			this.DirY = -this.DirY;
 			WebRTCSignal.sendMessageSync({type: 'score', player: '2'})
 		}
@@ -103,6 +109,7 @@ var WebGLObjects = (function () {
 		this.posY += this.DirY * this.speed;
 	}
 
+	/* Reset position ball */
 	Ball.prototype.reset = function(loser) {
 		this.posX = 0.0;
 		this.posY = 0.0;
@@ -116,6 +123,7 @@ var WebGLObjects = (function () {
 		this.DirX = 1;
 	}
 
+	/* Paddle object */
 	function Paddle(id, width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
 		ObjGL.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
 		this.id = id;
@@ -123,6 +131,7 @@ var WebGLObjects = (function () {
 	}
 	Paddle.prototype = new ObjGL();
 
+	/* Move paddle */
 	Paddle.prototype.move = function() {
 		var limitX = Settings.field.width / 2.0 - this.width / 1.5;
 
@@ -157,6 +166,7 @@ var WebGLObjects = (function () {
 		}
 	};
 
+	/* Ball hits with paddle */
 	Paddle.prototype.logic = function() {
 		if (objects.ball.posX + objects.ball.width/2.0 >= this.posX - Settings.paddle.width / 2.0 &&
 				objects.ball.posX - objects.ball.width/2.0 <= this.posX + Settings.paddle.width / 2.0) {
@@ -185,6 +195,7 @@ var WebGLObjects = (function () {
 		}
 	};
 
+	/* Initialize GL objects */
 	module.start = function(p) {
 		gl = WebGLUtils.getGL();
 		glProgram = WebGLUtils.getGLProgram();
@@ -215,7 +226,8 @@ var WebGLObjects = (function () {
 				Settings.paddle.texture2, buffers.paddle.vnormal);
 
 		return objects;
-  };
+	};
 
 	return module;
+
 }());
