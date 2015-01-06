@@ -1,7 +1,7 @@
 /**
- * WebRTCStreaming Module
+ * WebRTCSignal Module
  */
- var WebRTCStreaming = (function () {
+ var WebRTCSignal = (function () {
 
 	var module = {};
 

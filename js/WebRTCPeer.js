@@ -95,7 +95,7 @@
 				id: event.candidate.sdpMid,
 				candidate: event.candidate.candidate
 			};
-			WebRTCStreaming.sendMessage(message);
+			WebRTCSignal.sendMessage(message);
 			console.log('Sended ICE candidate:', event.candidate);
 		} else {
 			console.log('End of candidates');
@@ -117,7 +117,7 @@
 		}, logError);
 
 		/* Send SDP offer to signaling server */
-		WebRTCStreaming.sendMessage(self.pc.localDescription);
+		WebRTCSignal.sendMessage(self.pc.localDescription);
 		console.log('Sended SDP offer:', self.pc.localDescription);
 	};
 
@@ -148,7 +148,7 @@
 			console.log('Data channel state is: ' + self.dataChannel.readyState);
 			Helper.showAlert('alert-connected', Helper.initSpinner);
 			if(!self.isInitiator){
-				WebGLGame.start(self, WebRTCStreaming.sendMessageSync);
+				WebGLGame.start(self, WebRTCSignal.sendMessageSync);
 			}
 		};
 

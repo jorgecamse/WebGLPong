@@ -91,11 +91,11 @@ var WebGLObjects = (function () {
 		}
 		if (this.posY >= limitY) {
 			this.DirY = -this.DirY;
-			WebRTCStreaming.sendMessageSync({type: 'score', player: '1'})
+			WebRTCSignal.sendMessageSync({type: 'score', player: '1'})
 		}
 		if (this.posY <= -limitY) {
 			this.DirY = -this.DirY;
-			WebRTCStreaming.sendMessageSync({type: 'score', player: '2'})
+			WebRTCSignal.sendMessageSync({type: 'score', player: '2'})
 		}
 
 		// update ball position

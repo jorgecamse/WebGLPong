@@ -34,7 +34,7 @@ function enterRoom(room) {
 	$('#modal-index').modal('hide');
 	Helper.updateRoomURL(room);
 
-	var nd = WebRTCStreaming.start(localVideo, remoteVideo);
+	var nd = WebRTCSignal.start(localVideo, remoteVideo);
 	nd.joinRoom(room);
 };
 
