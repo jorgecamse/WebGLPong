@@ -47,7 +47,7 @@ $(document).ready(function() {
 
 	var room = window.location.hash.substring(1);
 	if (!room) {
-		Helper.loadModal("modal-index");
+		Helper.showModal("modal-index");
 	} else {
 		enterRoom(room);
 	};
