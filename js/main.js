@@ -1,3 +1,4 @@
+/* Parameters for the game */
 var Settings = {
 	canvas: {
 		width: 800,
@@ -22,6 +23,7 @@ var Settings = {
 	}
 }
 
+/* Enter in the game room */
 function enterRoom(room) {
 	if (!room) {
 		room = $('#room').val();
