@@ -17,7 +17,7 @@ var Settings = {
 	paddle: {
 	    width: 1.0 / 10,
 	    height: 1.0 / 30.0,
-	    speed: 0.01,
+	    speed: 1,
 	    texture1: 3,
 	    texture2: 4
 	}

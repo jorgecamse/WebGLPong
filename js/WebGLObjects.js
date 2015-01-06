@@ -127,7 +127,7 @@ var WebGLObjects = (function () {
 	function Paddle(id, width, height, x, y, speed, vbuff, ibuff, txtbuff, txtid, nbuff) {
 		ObjGL.call(this, width, height, x, y, vbuff, ibuff, txtbuff, txtid, nbuff);
 		this.id = id;
-		this.speed = speed;
+		this.speed = speed*0.01;
 	}
 	Paddle.prototype = new ObjGL();
 
