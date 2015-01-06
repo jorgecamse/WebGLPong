@@ -19,6 +19,7 @@
 		"./img/textures/paddle2.jpg"
 	];
 
+	/* Load textures images of Gl objects */
 	function loadTextures(sources, callback){
 		var images = [];
 		var loadedImages = 0;
@@ -37,8 +38,9 @@
 		}
 	};
 
+	/* Draw GL objects in canvas */
 	function drawScene() {
-		// Clear the canvas before we start drawing on it.
+		// Clear the canvas before we start drawing on it
 		WebGLUtils.clear();
 
 		// field
@@ -54,6 +56,7 @@
 		objectsGL.paddle2.draw();
 	};
 
+	/* Update position of GL objects */
 	function animateScene(){
 		if (peer.isInitiator) {
 			objectsGL.ball.move();
@@ -65,6 +68,7 @@
 		};
 	};
 
+	/* Send data to another peer */
 	function send() {
 		var data;
 
@@ -77,10 +81,12 @@
 		peer.sendData(data);
 	};
 
+	/* Update score on the screen */
 	function updateScore(ply) {
 		$('#' + ply + 'Score').html(parseInt($('#' + ply + 'Score').text()) + 1);
 	};
 
+	/* Start the game */
 	module.play = function() {
 		(function animLoop() {
 			animateScene();
@@ -92,6 +98,7 @@
 		})();
 	};
 
+	/* Handler data from another peer */
 	module.onReceiveData = function(data) {
 		if (peer.isInitiator){
 			objectsGL.paddle2.posX = data.M[0];
@@ -102,6 +109,7 @@
 		};
 	};
 
+	/* Update local or remote score */
 	module.Scored = function(ply){
 		if (peer.isInitiator){
 			if (ply == '1') {
@@ -118,11 +126,13 @@
 		}
 	};
 
+	/* Reset score peers */
 	module.resetScore = function(){
 		$('#localScore').html('0');
 		$('#remoteScore').html('0');
 	};
 
+	/* Initialize the game: gl, shaders, matrix, textures and objects */
 	module.start = function(p, callback) {
 
 		peer = p;
@@ -153,6 +163,7 @@
 		loadTextures(sources_textures, initBrowser);
 	};
 
+	/* Stop the game */
 	module.stop = function() {
 		clearTimeout(running);
 	};
