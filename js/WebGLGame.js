@@ -69,21 +69,9 @@
 		var data;
 
 		if (peer.isInitiator) {
-			data = {
-				paddle: {
-					x: objectsGL.paddle1.posX
-				},
-				ball: {
-					x: objectsGL.ball.posX,
-					y: objectsGL.ball.posY
-				}
-			};
+			data = {M: [objectsGL.paddle1.posX, objectsGL.ball.posX, objectsGL.ball.posY]};
 		} else {
-			data = {
-				paddle: {
-					x: objectsGL.paddle2.posX
-				}
-			};
+			data = {M: [objectsGL.paddle2.posX]};
 		};
 
 		peer.sendData(data);
@@ -106,11 +94,11 @@
 
 	module.onReceiveData = function(data) {
 		if (peer.isInitiator){
-			objectsGL.paddle2.posX = data.paddle.x;
+			objectsGL.paddle2.posX = data.M[0];
 		} else {
-			objectsGL.paddle1.posX = data.paddle.x;
-			objectsGL.ball.posX = data.ball.x;
-			objectsGL.ball.posY = data.ball.y;
+			objectsGL.paddle1.posX = data.M[0];
+			objectsGL.ball.posX = data.M[1];
+			objectsGL.ball.posY = data.M[2];
 		};
 	};
 
