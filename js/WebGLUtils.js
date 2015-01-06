@@ -21,12 +21,12 @@ var WebGLUtils = (function () {
 		var source;
 
 		$.ajax({
-		    async: false,
-		    url: './js/shaders/' + name,
-		    success: function (data) {
+				async: false,
+				url: './js/shaders/' + name,
+				success: function (data) {
 				source = data.firstChild.textContent;
-		    },
-		    dataType: 'xml'
+				},
+				dataType: 'xml'
 		});
 
 		return source;
@@ -45,15 +45,13 @@ var WebGLUtils = (function () {
 		return shader;
 	};
 
-	/**
-	 * Initialize the WebGL context on the canvas
-	 */
+	/* Initialize the WebGL context on the canvas */
 	module.initWebGL = function(canvasgl) {
 		canvas = canvasgl;
 		try {
 			gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 		} catch(e) { }
-		               
+
 		if (!gl) {
 			alert( "Error: Your browser does not appear to support WebGL.");
 		}
@@ -61,9 +59,7 @@ var WebGLUtils = (function () {
 		return gl;
 	};
 
-	/**
-	 * Initialize the shaders
-	 */
+	/* Initialize the shaders */
 	module.initShaders = function() {
 		var vs_source = getShader('vertex.vs');
 		var fs_source = getShader('fragment.fs');
@@ -82,7 +78,7 @@ var WebGLUtils = (function () {
 
 		// If creating the shader program failed, alert
 		if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
-		    alert("Unable to initialize the shader program.");
+				alert("Unable to initialize the shader program.");
 		}
 
 		// use program
@@ -105,16 +101,12 @@ var WebGLUtils = (function () {
 		glProgram.samplerUniform = gl.getUniformLocation(glProgram, "uSampler");
 	};
 
-	/**
-	 * Initialize the viewport
-	 */
+	/* Initialize the viewport */
 	module.initViewport = function() {
 		gl.viewport(0, 0, canvas.width, canvas.height);
 	};
 
-	/**
-	 * Clear the canvas before we start drawing on it
-	 */
+	/* Clear the canvas before we start drawing on it */
 	module.clear = function() {
 		if (gl) {
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -124,9 +116,7 @@ var WebGLUtils = (function () {
 		}
 	};
 
-	/**
-	 * Initialize project, model view and normal matrix
-	 */
+	/* Initialize project, model view and normal matrix */
 	module.initMatrix = function(angleX, angleZ) {
 		// Create a project matrix with 45 degrees field of view
 		matrixGL.p = mat4.create();
@@ -146,18 +136,14 @@ var WebGLUtils = (function () {
 		matrixGL.empty = false;
 	};
 
-	/**
-	 * Push the model view matrix on to the stack
-	 */
+	/* Push the model view matrix on to the stack */
 	module.pushMatrix = function() {
 		var matrix = mat4.create();
 		mat4.set(matrixGL.mv, matrix);
 		stack.push(matrix);
 	};
 
-	/**
-	 * Pop on the stack back to the model view matrix
-	 */
+	/* Pop on the stack back to the model view matrix */
 	module.popMatrix = function() {
 		if (stack.length == 0)
 			throw "Stack is empty";
@@ -165,9 +151,7 @@ var WebGLUtils = (function () {
 		matrixGL.mv = stack.pop();
 	};
 
-	/**
-	 * Setup textures
-	 */
+	/* Setup textures */
 	module.setupTextures = function(images) {
 		for (i = 0; i < images.length; i++) {
 			gl.activeTexture(gl.TEXTURE0 + i);
@@ -184,33 +168,38 @@ var WebGLUtils = (function () {
 		}
 	};
 
+	/* Returns WebGL context */
 	module.getGL = function() {
 		if (!gl)
 			throw ("GL is not initialized");
 
 		return gl;
-  };
+	};
 
-  module.getGLProgram = function() {
+	/* Returns WebGL program */
+	module.getGLProgram = function() {
 		if (!glProgram)
 			throw ("GLProgram is not initialized");
 
 		return glProgram;
-  };
+	};
 
-  module.getGLTextures = function() {
+	/* Returns WebGL textures */
+	module.getGLTextures = function() {
 		if (texturesGL.length == 0)
 			throw ("Textures are not initialized");
 
 		return texturesGL;
-  };
+	};
 
-  module.getMatrix = function() {
+	/* Returns project, model view and normal matrix */
+	module.getMatrix = function() {
 		if (matrixGL.empty)
 			throw ("Matrix is not initialized");
 
 		return matrixGL;
-  };
+	};
 
 	return module;
+
 }());
