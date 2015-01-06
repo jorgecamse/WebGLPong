@@ -1,5 +1,5 @@
 /**
- * WebRTCSignal Module
+ * WebRTC Signal Module
  */
  var WebRTCSignal = (function () {
 
@@ -35,6 +35,7 @@
 		}
   };
 
+	/* Clear game and remove info of another peer */
 	function disconnectPeer() {
 		self.peer.closeConnection();
 		WebGLGame.stop();
@@ -77,12 +78,12 @@
 		});
 
 		connection.on('sync', function (message){
-			if (message.type == "play") {
+			if (message.type == "play") { // Start the game
 				Helper.hideAlert('alert-connected');
 				$('#canvasgl').show();
 				Helper.stopSpinner();
 				WebGLGame.play();
-			} else if (message.type == "score") {
+			} else if (message.type == "score") { // Update score
 				WebGLGame.Scored(message.player);
 			} else {
 				console.log("Invalid message type " + message.type);
@@ -95,6 +96,7 @@
 		});
 	};
 
+	/* WebRTC iface object */
 	function WebRTCIface(opts) {
 		self = this;
 		var options = opts || {};
@@ -151,6 +153,7 @@
 		}, logError);
 	};
 
+	/* Initialize WebRTC iface */
 	module.start = function(lvideo, rvideo) {
 		var iface = new WebRTCIface({
 					localVideo: lvideo,
@@ -165,6 +168,7 @@
 		connection.emit('message', message);
 	};
 
+	/* Send synchronization message to signaling server */
 	module.sendMessageSync = function(message) {
 		console.log('Client sending sync message');
 		connection.emit('sync', message);
